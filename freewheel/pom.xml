@@ -6,13 +6,43 @@
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>freewheel</name>
-  <url>http://maven.apache.org</url>
+  <url>http://www.assembla.com/wiki/show/bMYtmiQ58r3QK0eJe5afGb</url>
+  <issueManagement>
+  	<system>Trac</system>
+  	<url>http://www.assembla.com/spaces/freewheel/tickets</url>
+  </issueManagement>
+  <scm>
+  	<url>http://subversion.assembla.com/svn/freewheel</url>
+  </scm>
+  <repositories>
+  </repositories>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <version>4.7</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+    	<groupId>org.jmock</groupId>
+    	<artifactId>jmock-junit4</artifactId>
+    	<version>2.5.1</version>
+    	<scope>test</scope>
+    </dependency>
+    <dependency>
+    	<groupId>commons-logging</groupId>
+    	<artifactId>commons-logging</artifactId>
+    	<version>1.1.1</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.springframework</groupId>
+    	<artifactId>spring-jpa</artifactId>
+    	<version>2.0.8</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.springframework</groupId>
+    	<artifactId>spring-aop</artifactId>
+    	<version>2.5.6.SEC01</version>
     </dependency>
   </dependencies>
 </project>
