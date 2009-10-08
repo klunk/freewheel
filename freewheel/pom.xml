@@ -44,5 +44,10 @@
     	<artifactId>spring-aop</artifactId>
     	<version>2.5.6.SEC01</version>
     </dependency>
+    <dependency>
+    	<groupId>checkstyle</groupId>
+    	<artifactId>checkstyle</artifactId>
+    	<version>5.0</version>
+    </dependency>
   </dependencies>
 </project>
