@@ -23,6 +23,11 @@ public class RemoteWorker {
 		log.info("Freewheel RemoteWroker running ....");
 		Runnable runner = new ListenerThread();
 
+		if (runner instanceof ListenerThread) {
+			((ListenerThread) runner).setNumberOfWorkers(5);
+			((ListenerThread) runner).setPort(12145);
+		}
+		
 		Thread thread = new Thread(runner);
 		
 		thread.start();
