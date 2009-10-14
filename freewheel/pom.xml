@@ -14,6 +14,18 @@
   <scm>
   	<url>http://subversion.assembla.com/svn/freewheel</url>
   </scm>
+  <build>
+  	<plugins>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+  		</plugin>
+  	</plugins>
+  </build>
   <repositories>
   </repositories>
   <dependencies>
@@ -59,5 +71,12 @@
     	<artifactId>log4j</artifactId>
     	<version>1.2.14</version>
     </dependency>
+    <dependency>
+    	<groupId>lombok</groupId>
+    	<artifactId>lombok</artifactId>
+    	<version>0.8.5</version>
+    </dependency>
   </dependencies>
+  <properties>
+  </properties>
 </project>
