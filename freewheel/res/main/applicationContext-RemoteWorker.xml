@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+
+	<bean name="remoteWorker" class="org.freewheelschedule.freewheel.remoteworker.RemoteWorker">
+		<property name="port"><value>12145</value></property>
+		<property name="numberOfWorkers"><value>5</value></property>
+	</bean>
+	
+</beans>

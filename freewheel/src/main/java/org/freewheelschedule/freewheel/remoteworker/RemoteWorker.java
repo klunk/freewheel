@@ -8,35 +8,61 @@
  */
 package org.freewheelschedule.freewheel.remoteworker;
 
+import lombok.Setter;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class RemoteWorker {
 
-	private static Log log = LogFactory.getLog(RemoteWorker.class);
+	private final static Log log = LogFactory.getLog(RemoteWorker.class);
+	
+	private @Setter int numberOfWorkers;
+	private @Setter int port;
+
+	private Thread runnerThread;
+	
+	public void runRemoteWorker() {
+		
+		log.info("Freewheel RemoteWroker running ....");
+		Runnable runner = new ListenerThread();
+
+		log.info("Registering the shutdown hook");
+		
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				log.info("Shutting down the RemoteWorker ...");
+			}
+		});
+		
+		if (runner instanceof ListenerThread) {
+			((ListenerThread) runner).setPort(port);
+		}
+		
+		runnerThread = new Thread(runner);
+		
+		runnerThread.start();
+		try {
+			runnerThread.join();
+		} catch (InterruptedException e) {
+			log.error("Join interrupted", e);
+		}
+		
+		log.info("Freewheel RemoteWorker has stopped.");
+
+	}
+
 	/**
 	 * main method to start the RemoteWorker processes.
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-RemoteWorker.xml");
 		
-		log.info("Freewheel RemoteWroker running ....");
-		Runnable runner = new ListenerThread();
-
-		if (runner instanceof ListenerThread) {
-			((ListenerThread) runner).setNumberOfWorkers(5);
-			((ListenerThread) runner).setPort(12145);
-		}
-		
-		Thread thread = new Thread(runner);
-		
-		thread.start();
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			log.error("Join interrupted", e);
-		}
-
+		RemoteWorker worker = (RemoteWorker)ctx.getBean("remoteWorker");
+		worker.runRemoteWorker();
 	}
 
 }

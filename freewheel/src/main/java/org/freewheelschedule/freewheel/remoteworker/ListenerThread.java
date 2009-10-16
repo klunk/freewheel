@@ -17,7 +17,6 @@ public class ListenerThread implements Listener, Runnable {
 
 	private static Log log = LogFactory.getLog(ListenerThread.class);
 	
-	private @Setter int numberOfWorkers;
 	private @Setter int port;
 	
 	public void run() {
@@ -32,52 +31,59 @@ public class ListenerThread implements Listener, Runnable {
 		
 		try {
 			socket = new ServerSocket(port);
-		} catch (IOException e1) {
-			log.error("Error creating a ServerSocket", e1);
-			return;
-		}
 		
-		while(true) {
-			log.debug("In the Listener thread");
-			try {
-				client = socket.accept();
-				log.info("Accepted contact from " + client.getInetAddress());
-				request = new BufferedReader(new InputStreamReader(client.getInputStream()));
-				response = new PrintWriter(new OutputStreamWriter(client.getOutputStream()));
-				response.print("HELO\r\n");
-				response.flush();
-				
-				while ((conversation = request.readLine()) != null) {
+			while(true) {
+				log.debug("In the Listener thread");
+				try {
+					client = socket.accept();
+					log.info("Accepted contact from " + client.getInetAddress());
+					request = new BufferedReader(new InputStreamReader(client.getInputStream()));
+					response = new PrintWriter(new OutputStreamWriter(client.getOutputStream()));
+					response.print("HELO\r\n");
+					response.flush();
+					
+					conversation = request.readLine();
 					if (conversation.contains("HELO " + client.getInetAddress())) {
 						response.print("Enter command to run\r\n");
 						response.flush();
-					} else {
+						conversation = request.readLine();
 						log.info("Message from client: " + conversation);
-					}
-				}
-			} catch (IOException e) {
-				log.error("Error while waiting for instructions", e);
-				return;
-			} finally {
-				try {
-					if (request != null) {
-						request.close();
-					}
-					if (response != null) {
-						response.close();
-					}
-					if (client != null) {
-						client.close();
-					}
-					if (socket != null) {
-						socket.close();
+					} else {
+						log.info("Invalid response from client: " + conversation);
 					}
 				} catch (IOException e) {
-					log.error("Unable to close the socket", e);
+					log.error("Error while waiting for instructions", e);
+					return;
+				} finally {
+					try {
+						if (request != null) {
+							request.close();
+						}
+						if (response != null) {
+							response.close();
+						}
+						if (client != null) {
+							client.close();
+						}
+					} catch (IOException e) {
+						log.error("Unable to close the socket", e);
+					}
 				}
 			}
-		}
 
+		} catch (IOException e1) {
+			log.error("Error creating a ServerSocket", e1);
+			return;
+		} finally {
+			try {
+				if (socket != null) {
+					socket.close();
+				}
+				log.info("Stopping the listener");
+			} catch (IOException e) {
+				log.error("Unable to close the socket", e);
+			}
+		}
 	}
 
 }
