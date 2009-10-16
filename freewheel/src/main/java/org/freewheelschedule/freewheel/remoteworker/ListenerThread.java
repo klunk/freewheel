@@ -27,7 +27,7 @@ public class ListenerThread implements Listener, Runnable {
 		PrintWriter response = null;
 		String conversation = null;
 		
-		log.info("Freewheel RemoteWorker listening ...");
+		log.info("Freewheel RemoteWorker listening on port " + port + " ...");
 		
 		try {
 			socket = new ServerSocket(port);
