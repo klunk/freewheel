@@ -8,6 +8,9 @@
  */
 package org.freewheelschedule.freewheel.remoteworker;
 
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
+
 import lombok.Setter;
 
 import org.apache.commons.logging.Log;
@@ -22,12 +25,17 @@ public class RemoteWorker {
 	private @Setter int numberOfWorkers;
 	private @Setter int port;
 
+	private Thread listenerThread;
 	private Thread runnerThread;
+	private Queue<String> jobQueue;
 	
 	public void runRemoteWorker() {
 		
+		Runnable listener = new ListenerThread();
+		Runnable runner = new RunnerThread();
+		jobQueue = new LinkedBlockingQueue<String>();
+		
 		log.info("Freewheel RemoteWroker running ....");
-		Runnable runner = new ListenerThread();
 
 		log.info("Registering the shutdown hook");
 		
@@ -37,15 +45,23 @@ public class RemoteWorker {
 			}
 		});
 		
-		if (runner instanceof ListenerThread) {
-			((ListenerThread) runner).setPort(port);
+		if (listener instanceof ListenerThread) {
+			((ListenerThread) listener).setPort(port);
+			((ListenerThread) listener).setJobQueue(jobQueue);
+			
+		}
+		if (runner instanceof RunnerThread) {
+			((RunnerThread) runner).setNumberOfThreads(numberOfWorkers);
+			((RunnerThread) runner).setJobQueue(jobQueue);
 		}
 		
+		listenerThread = new Thread(listener);
 		runnerThread = new Thread(runner);
 		
+		listenerThread.start();
 		runnerThread.start();
 		try {
-			runnerThread.join();
+			listenerThread.join();
 		} catch (InterruptedException e) {
 			log.error("Join interrupted", e);
 		}

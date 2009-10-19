@@ -7,6 +7,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Queue;
 
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ public class ListenerThread implements Listener, Runnable {
 	private static Log log = LogFactory.getLog(ListenerThread.class);
 	
 	private @Setter int port;
+	private @Setter Queue<String> jobQueue;
 	
 	public void run() {
 		
@@ -48,6 +50,7 @@ public class ListenerThread implements Listener, Runnable {
 						response.flush();
 						conversation = request.readLine();
 						log.info("Message from client: " + conversation);
+						jobQueue.add(conversation);
 					} else {
 						log.info("Invalid response from client: " + conversation);
 					}
