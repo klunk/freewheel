@@ -31,8 +31,8 @@ public class RemoteWorker {
 	
 	public void runRemoteWorker() {
 		
-		Runnable listener = new ListenerThread();
-		Runnable runner = new RunnerThread();
+		final Runnable listener = new ListenerThread();
+		final Runnable runner = new RunnerThread();
 		jobQueue = new LinkedBlockingQueue<String>();
 		
 		log.info("Freewheel RemoteWroker running ....");
@@ -42,6 +42,7 @@ public class RemoteWorker {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				log.info("Shutting down the RemoteWorker ...");
+				((RunnerThread) runner).stopExecutions();
 			}
 		});
 		

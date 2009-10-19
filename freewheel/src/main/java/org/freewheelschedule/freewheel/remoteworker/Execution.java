@@ -1,7 +1,5 @@
 package org.freewheelschedule.freewheel.remoteworker;
 
-public interface Runner {
+public interface Execution extends Runnable {
 
-	public void stopExecutions();
-	
 }
