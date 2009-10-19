@@ -8,7 +8,7 @@
  */
 package org.freewheelschedule.freewheel.remoteworker;
 
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import lombok.Setter;
@@ -27,7 +27,7 @@ public class RemoteWorker {
 
 	private Thread listenerThread;
 	private Thread runnerThread;
-	private Queue<String> jobQueue;
+	private BlockingQueue<String> jobQueue;
 	
 	public void runRemoteWorker() {
 		

@@ -7,7 +7,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 
 import lombok.Setter;
 
@@ -19,7 +19,7 @@ public class ListenerThread implements Listener, Runnable {
 	private static Log log = LogFactory.getLog(ListenerThread.class);
 	
 	private @Setter int port;
-	private @Setter Queue<String> jobQueue;
+	private @Setter BlockingQueue<String> jobQueue;
 	
 	public void run() {
 		
@@ -50,12 +50,15 @@ public class ListenerThread implements Listener, Runnable {
 						response.flush();
 						conversation = request.readLine();
 						log.info("Message from client: " + conversation);
-						jobQueue.add(conversation);
+						jobQueue.put(conversation);
 					} else {
 						log.info("Invalid response from client: " + conversation);
 					}
 				} catch (IOException e) {
 					log.error("Error while waiting for instructions", e);
+					return;
+				} catch (InterruptedException e1) {
+					log.error("Error while processing instruction", e1);
 					return;
 				} finally {
 					try {
