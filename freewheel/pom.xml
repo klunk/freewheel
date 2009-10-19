@@ -3,7 +3,16 @@
   <groupId>org.freewheelschedule</groupId>
   <artifactId>freewheel</artifactId>
   <packaging>pom</packaging>
+  <name>Freewheel</name>
   <version>0.0.1-SNAPSHOT</version>
+  <url>http://www.assembla.com/wiki/show/bMYtmiQ58r3QK0eJe5afGb</url>
+  <issueManagement>
+  	<system>Trac</system>
+  	<url>http://www.assembla.com/spaces/freewheel/tickets</url>
+  </issueManagement>
+  <scm>
+  	<url>http://subversion.assembla.com/svn/freewheel</url>
+  </scm>
   <modules>
     <module>RemoteWorker</module>
     <module>ControlServer</module>
