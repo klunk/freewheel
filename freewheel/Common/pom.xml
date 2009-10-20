@@ -26,5 +26,10 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+    	<groupId>lombok</groupId>
+    	<artifactId>lombok</artifactId>
+    	<version>0.8.5</version>
+    </dependency>
   </dependencies>
 </project>
