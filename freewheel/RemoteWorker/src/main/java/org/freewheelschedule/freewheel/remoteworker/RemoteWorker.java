@@ -15,6 +15,7 @@ import lombok.Setter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -27,13 +28,13 @@ public class RemoteWorker {
 
 	private Thread listenerThread;
 	private Thread runnerThread;
-	private BlockingQueue<String> jobQueue;
+	private BlockingQueue<JobInitiationMessage> jobQueue;
 	
 	public void runRemoteWorker() {
 		
 		final Runnable listener = new ListenerThread();
 		final Runnable runner = new RunnerThread();
-		jobQueue = new LinkedBlockingQueue<String>();
+		jobQueue = new LinkedBlockingQueue<JobInitiationMessage>();
 		
 		log.info("Freewheel RemoteWroker running ....");
 

@@ -13,13 +13,14 @@ import lombok.Setter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
 
 public class ListenerThread implements Listener, Runnable {
 
 	private static Log log = LogFactory.getLog(ListenerThread.class);
 	
 	private @Setter int port;
-	private @Setter BlockingQueue<String> jobQueue;
+	private @Setter BlockingQueue<JobInitiationMessage> jobQueue;
 	
 	public void run() {
 		
@@ -50,7 +51,8 @@ public class ListenerThread implements Listener, Runnable {
 						response.flush();
 						conversation = request.readLine();
 						log.info("Message from client: " + conversation);
-						jobQueue.put(conversation);
+						JobInitiationMessage jobDetails = new JobInitiationMessage(conversation);
+						jobQueue.put(jobDetails);
 					} else {
 						log.info("Invalid response from client: " + conversation);
 					}

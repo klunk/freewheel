@@ -8,13 +8,14 @@ import lombok.Setter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
 
 public class RunnerThread implements Runnable, Runner {
 
 	private static Log log = LogFactory.getLog(RunnerThread.class);
 	
 	private @Setter int numberOfThreads;
-	private @Setter BlockingQueue<String> jobQueue;
+	private @Setter BlockingQueue<JobInitiationMessage> jobQueue;
 	private ExecutorService threadPool;
 	
 	@Override
@@ -26,11 +27,11 @@ public class RunnerThread implements Runnable, Runner {
 		while(true) {
 			try {
 				log.debug("Waiting for command to come from listener.");
-				String command = jobQueue.take();
+				JobInitiationMessage command = jobQueue.take();
 				log.info("Command received: " + command);
 				Execution commandLine = new CommandLineExecution();
 				if (commandLine instanceof CommandLineExecution) {
-					((CommandLineExecution) commandLine).setCommand(command);
+					((CommandLineExecution) commandLine).setCommand(command.getCommand());
 				}
 				threadPool.submit(commandLine);
 			} catch (InterruptedException e) {
