@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>freewheel</artifactId>
+    <groupId>org.freewheelschedule</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>org.freewheelschedule.freewheel</groupId>
+  <artifactId>Common</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>Freewheel Common</name>
+  <url>http://www.assembla.com/wiki/show/bMYtmiQ58r3QK0eJe5afGb</url>
+  <issueManagement>
+  	<system>Trac</system>
+  	<url>http://www.assembla.com/spaces/freewheel/tickets</url>
+  </issueManagement>
+  <scm>
+  	<url>http://subversion.assembla.com/svn/freewheel</url>
+  </scm>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
