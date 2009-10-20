@@ -11,6 +11,8 @@ import lombok.Setter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
+import org.freewheelschedule.freewheel.common.message.JobType;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -49,10 +51,16 @@ public class ControlServer {
 					return;
 				}
 				response = result.readLine();
+				
 				if (response.equals("Enter command to run")) {
-					command.print("java -version\r\n");
+					JobInitiationMessage initiation = new JobInitiationMessage();
+					initiation.setJobType(JobType.COMMAND);
+					initiation.setCommand("java -version");
+					log.debug(initiation);
+					command.print(initiation.toString() + "\r\n");
 					command.flush();
 				}
+				
 				Thread.sleep(10000);
 			} catch (UnknownHostException e) {
 				log.error("Unable to open socket to RemoteWorker", e);
