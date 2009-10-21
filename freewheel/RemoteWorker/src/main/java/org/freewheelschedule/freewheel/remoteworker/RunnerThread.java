@@ -34,7 +34,7 @@ public class RunnerThread implements Runnable, Runner {
 					((CommandLineExecution) commandLine).setCommand(command.getCommand());
 				}
 				threadPool.submit(commandLine);
-			} catch (InterruptedException e) {
+			} catch (InterruptedException e) { 
 				log.error("RunnerThread sleep was interrupted", e);
 			}
 		}
