@@ -56,6 +56,7 @@ public class ControlServer {
 					JobInitiationMessage initiation = new JobInitiationMessage();
 					initiation.setJobType(JobType.COMMAND);
 					initiation.setCommand("java -version");
+					initiation.setStderr("stderr.log");
 					log.debug(initiation);
 					command.print(initiation.toString() + "\r\n");
 					command.flush();
