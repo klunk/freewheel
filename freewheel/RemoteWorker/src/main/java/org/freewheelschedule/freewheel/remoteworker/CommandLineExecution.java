@@ -31,10 +31,10 @@ public class CommandLineExecution implements Execution {
 			Process process = Runtime.getRuntime().exec(command.getCommand());
 			
 			if (command.getStdout()!= null) {
-				stdoutOutput = new PrintWriter(new FileOutputStream(command.getStdout()));
+				stdoutOutput = new PrintWriter(new FileOutputStream(command.getStdout(),command.getAppendStdout()));
 			}
 			if (command.getStderr() != null) {
-				stderrOutput = new PrintWriter(new FileOutputStream(command.getStderr()));
+				stderrOutput = new PrintWriter(new FileOutputStream(command.getStderr(),command.getAppendStderr()));
 			}
 			// getInputStream() returns the stdout of the process that ran
 			BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -42,13 +42,13 @@ public class CommandLineExecution implements Execution {
 			while ((message = stdOut.readLine()) != null) {
 				log.info("stdout: " + message);
 				if (stdoutOutput != null) {
-					stdoutOutput.write(message);
+					stdoutOutput.write(message+"\n");
 				}
 			}
 			while ((message = stdErr.readLine()) != null) {
 				log.info("stderr: " + message);
 				if (stderrOutput != null) {
-					stderrOutput.write(message);
+					stderrOutput.write(message+"\n");
 				}
 			}
 			if (stderrOutput != null) {
