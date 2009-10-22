@@ -14,7 +14,9 @@ public @ToString class JobInitiationMessage {
 	private @Setter @Getter JobType jobType;
 	private @Setter @Getter String command;
 	private @Setter @Getter String stdout;
+	private @Setter @Getter Boolean appendStdout = false;
 	private @Setter @Getter String stderr;
+	private @Setter @Getter Boolean appendStderr = false;
 	private @Setter @Getter String serverMachine;
 	private @Setter @Getter Integer serverPort;
 	
@@ -45,10 +47,16 @@ public @ToString class JobInitiationMessage {
 					stdout = entry.substring(entry.indexOf("=")+1);
 				}
 			}
-			if (entry.contains("stderror=")) {
+			if (entry.contains("appendStdout=")) {
+				appendStdout = Boolean.valueOf(entry.substring(entry.indexOf("=")+1));
+			}
+			if (entry.contains("stderr=")) {
 				if (!entry.substring(entry.indexOf("=")+1).startsWith("null")) {
 					stderr = entry.substring(entry.indexOf("=")+1);
 				}
+			}
+			if (entry.contains("appendStderr=")) {
+				appendStderr = Boolean.valueOf(entry.substring(entry.indexOf("=")+1));
 			}
 			if (entry.contains("serverMachine=")) {
 				if (!entry.substring(entry.indexOf("=")+1).startsWith("null")) {
