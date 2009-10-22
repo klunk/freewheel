@@ -57,6 +57,8 @@ public class ControlServer {
 					initiation.setJobType(JobType.COMMAND);
 					initiation.setCommand("java -version");
 					initiation.setStderr("stderr.log");
+					initiation.setAppendStderr(true);
+					initiation.setStdout("stdout.log");
 					log.debug(initiation);
 					command.print(initiation.toString() + "\r\n");
 					command.flush();
