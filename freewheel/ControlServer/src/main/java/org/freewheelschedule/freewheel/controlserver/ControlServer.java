@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import lombok.Setter;
@@ -64,17 +65,21 @@ public class ControlServer {
 					command.flush();
 				}
 				
-				Thread.sleep(10000);
 			} catch (UnknownHostException e) {
 				log.error("Unable to open socket to RemoteWorker", e);
 				return;
+			} catch (SocketException e) {
+				log.error("RemoteWorker is currently unavailable.", e);
 			} catch (IOException e) {
 				log.error("Unable to communicate with RemoteWorker", e);
 				return;
+			}
+			
+			try {
+				Thread.sleep(10000);
 			} catch (InterruptedException e) {
 				log.error("Sleep interrupted, continuing.", e);
 			}
-			
 		}
 	}
 	
