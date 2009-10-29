@@ -45,7 +45,7 @@ public class ControlServer {
 				
 				String response = result.readLine();
 				if (response.equals("HELO")) {
-					command.print("HELO /127.0.0.1\r\n");
+					command.print("HELO localhost\r\n");
 					command.flush();
 				} else {
 					log.error("Unexpected response from RemoteClient");
