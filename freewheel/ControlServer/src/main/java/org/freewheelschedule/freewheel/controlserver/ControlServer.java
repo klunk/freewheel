@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -25,6 +26,15 @@ public class ControlServer {
 	private @Setter int remotePort;
 	
 	public void runControlServer() {
+		
+		String hostname;
+		try {
+			hostname = (InetAddress.getLocalHost()).getCanonicalHostName();
+		} catch (UnknownHostException e1) {
+			log.error("Unable to determine hostname",e1);
+			return;
+		}
+		
 		log.info("Running the ControlServer ....");
 		
 		log.info("Registering the shutdown hook");
@@ -38,14 +48,14 @@ public class ControlServer {
 		while (true) {
 			try {
 				log.debug("Connecting to the RemoteWorker to run a command");
-				Socket remoteWorker = new Socket("localhost", remotePort);
+				Socket remoteWorker = new Socket(hostname, remotePort);
 				
 				PrintWriter command = new PrintWriter(remoteWorker.getOutputStream(), true);
 				BufferedReader result = new BufferedReader(new InputStreamReader(remoteWorker.getInputStream()));
 				
 				String response = result.readLine();
 				if (response.equals("HELO")) {
-					command.print("HELO localhost\r\n");
+					command.print("HELO " + hostname + "\r\n");
 					command.flush();
 				} else {
 					log.error("Unexpected response from RemoteClient");
