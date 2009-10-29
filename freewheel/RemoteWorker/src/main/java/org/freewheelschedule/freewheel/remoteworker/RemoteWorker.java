@@ -8,7 +8,7 @@
  */
 package org.freewheelschedule.freewheel.remoteworker;
 
-import java.util.concurrent.BlockingQueue;
+import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import lombok.Setter;
@@ -24,18 +24,13 @@ public class RemoteWorker {
 
 	private final static Log log = LogFactory.getLog(RemoteWorker.class);
 	
-	private @Setter int numberOfWorkers;
-	private @Setter FreewheelSocket inboundSocket;
+	private @Setter Runnable listener;
+	private @Setter Runnable runner;
 	
 	private Thread listenerThread;
 	private Thread runnerThread;
-	private BlockingQueue<JobInitiationMessage> jobQueue;
 	
 	public void runRemoteWorker() {
-		
-		final Runnable listener = new ListenerThread();
-		final Runnable runner = new RunnerThread();
-		jobQueue = new LinkedBlockingQueue<JobInitiationMessage>();
 		
 		log.info("Freewheel RemoteWroker running ....");
 
@@ -47,16 +42,6 @@ public class RemoteWorker {
 				((RunnerThread) runner).stopExecutions();
 			}
 		});
-		
-		if (listener instanceof ListenerThread) {
-			((ListenerThread) listener).setInboundSocket(inboundSocket);
-			((ListenerThread) listener).setJobQueue(jobQueue);
-			
-		}
-		if (runner instanceof RunnerThread) {
-			((RunnerThread) runner).setNumberOfThreads(numberOfWorkers);
-			((RunnerThread) runner).setJobQueue(jobQueue);
-		}
 		
 		listenerThread = new Thread(listener);
 		runnerThread = new Thread(runner);
