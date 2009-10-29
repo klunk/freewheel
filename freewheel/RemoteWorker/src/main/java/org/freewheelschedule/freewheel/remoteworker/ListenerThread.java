@@ -1,6 +1,7 @@
 package org.freewheelschedule.freewheel.remoteworker;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 
@@ -17,6 +18,7 @@ public class ListenerThread implements Listener, Runnable {
 	
 	private @Setter BlockingQueue<JobInitiationMessage> jobQueue;
 	private @Setter FreewheelSocket inboundSocket;
+	private @Setter boolean continueWaiting = true;
 	
 	public void run() {
 		
@@ -24,7 +26,7 @@ public class ListenerThread implements Listener, Runnable {
 		
 		log.info("Freewheel RemoteWorker listening on port " + inboundSocket.getPort() + " ...");
 		
-		while(true) {
+		do {
 			log.debug("In the Listener thread");
 			try {
 				inboundSocket.waitSocket();
@@ -41,6 +43,8 @@ public class ListenerThread implements Listener, Runnable {
 				} else {
 					log.info("Invalid response from client: " + conversation);
 				}
+			} catch (SocketTimeoutException ste) {
+				log.info("Socket timed out on accept, continue waiting: " + continueWaiting);
 			} catch (IOException e) {
 				log.error("Error while waiting for instructions", e);
 				return;
@@ -55,7 +59,7 @@ public class ListenerThread implements Listener, Runnable {
 				}
 			}
 
-		}
+		} while (continueWaiting);
 	}
 
 }

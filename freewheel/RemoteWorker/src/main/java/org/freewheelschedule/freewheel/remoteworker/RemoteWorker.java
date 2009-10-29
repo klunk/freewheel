@@ -35,6 +35,7 @@ public class RemoteWorker {
 			public void run() {
 				log.info("Shutting down the RemoteWorker ...");
 				((RunnerThread) runner).stopExecutions();
+				((ListenerThread)listener).setContinueWaiting(false);
 			}
 		});
 		

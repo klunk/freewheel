@@ -29,6 +29,9 @@
 		<constructor-arg index="0">
 			<value>${port}</value>
 		</constructor-arg>
+		<constructor-arg index="1">
+			<value>${socketTimeout}</value>
+		</constructor-arg>
 	</bean>
 	
 	<!-- The thread that will actually execute the jobs -->
