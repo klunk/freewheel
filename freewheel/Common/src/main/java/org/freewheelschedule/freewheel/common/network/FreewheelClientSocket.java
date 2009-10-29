@@ -31,6 +31,17 @@ public class FreewheelClientSocket implements FreewheelSocket {
 	public void close() throws IOException {
 		if (server != null) {
 			server.close();
+			server = null;
 		}
+	}
+	
+	@Override
+	public String getRemoteMachineName() {
+		return server.getRemoteMachineName();
+	}
+	
+	@Override
+	public int getPort() {
+		return ((ServerSocketProxy)socket).getPort();
 	}
 }

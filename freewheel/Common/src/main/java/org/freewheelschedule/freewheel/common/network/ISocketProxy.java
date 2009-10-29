@@ -10,5 +10,7 @@ public interface ISocketProxy {
 	public String read() throws IOException;
 
 	public void close() throws IOException;
+
+	public String getRemoteMachineName();
 	
 }

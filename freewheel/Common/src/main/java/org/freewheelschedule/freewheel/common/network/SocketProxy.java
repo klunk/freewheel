@@ -33,6 +33,13 @@ public class SocketProxy implements ISocketProxy {
 	@Override
 	public void close() throws IOException {
 		socket.close();
+		writer.close();
+		reader.close();
+	}
+
+	@Override
+	public String getRemoteMachineName() {
+		return socket.getInetAddress().getCanonicalHostName();
 	}
 
 }

@@ -8,5 +8,7 @@ public interface FreewheelSocket {
 	public void writeSocket(String message);
 	public String readSocket() throws IOException;
 	public void close() throws IOException;
+	public String getRemoteMachineName();
+	public int getPort();
 	
 }
