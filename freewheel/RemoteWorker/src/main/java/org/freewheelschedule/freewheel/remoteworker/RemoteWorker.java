@@ -8,15 +8,10 @@
  */
 package org.freewheelschedule.freewheel.remoteworker;
 
-import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
-
 import lombok.Setter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
-import org.freewheelschedule.freewheel.common.network.FreewheelSocket;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
