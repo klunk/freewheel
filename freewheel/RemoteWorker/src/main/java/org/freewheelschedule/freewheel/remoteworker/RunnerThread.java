@@ -1,9 +1,9 @@
 package org.freewheelschedule.freewheel.remoteworker;
 
-import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import lombok.Setter;
 
@@ -11,41 +11,67 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
 import org.freewheelschedule.freewheel.common.message.JobType;
+import org.springframework.beans.factory.InitializingBean;
 
-public class RunnerThread implements Runnable, Runner {
+public class RunnerThread implements Runnable, Runner, InitializingBean {
 
 	private static Log log = LogFactory.getLog(RunnerThread.class);
 	
 	private @Setter int numberOfThreads;
 	private @Setter BlockingQueue<JobInitiationMessage> jobQueue;
-	private ExecutorService threadPool;
+	private @Setter ExecutorService threadPool;
+	private @Setter boolean continueWaiting = true;
+	private @Setter int timeout;
+	
+	public RunnerThread() {
+		super();
+	}
+	
+	public RunnerThread(int numberOfThreads) {
+		this.numberOfThreads = numberOfThreads;
+		createThreadPool();
+	}
 	
 	@Override
 	public void run() {
 		log.info("Worker thread is running.");
 	
 		Execution commandLine = null;
-		threadPool = Executors.newFixedThreadPool(numberOfThreads);
 		
-		while(true) {
+		do {
 			try {
 				log.debug("Waiting for command to come from listener.");
-				JobInitiationMessage command = jobQueue.take();
-				log.info("Command received: " + command);
-				if (command.getJobType().equals(JobType.COMMAND)) {
-					commandLine = new CommandLineExecution();
-					((CommandLineExecution) commandLine).setCommand(command);
+				JobInitiationMessage command = jobQueue.poll(timeout, TimeUnit.MILLISECONDS);
+				if(command != null) {
+					log.info("Command received: " + command);
+					if (command.getJobType().equals(JobType.COMMAND)) {
+						commandLine = new CommandLineExecution();
+						commandLine.setCommand(command);
+					}
+					threadPool.submit(commandLine);
+				} else {
+					log.info("Timeout waiting for jobQueue");
 				}
-				threadPool.submit(commandLine);
 			} catch (InterruptedException e) { 
 				log.error("RunnerThread sleep was interrupted", e);
 			}
-		}
+		} while(continueWaiting);
 
+	}
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		if (threadPool == null) {
+			createThreadPool();
+		}
+	}
+	private void createThreadPool() {
+		threadPool = Executors.newFixedThreadPool(numberOfThreads);
 	}
 	
 	public void stopExecutions() {
 		threadPool.shutdownNow();
+		continueWaiting = false;
 	}
 
 }

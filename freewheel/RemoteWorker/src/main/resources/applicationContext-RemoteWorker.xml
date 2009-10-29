@@ -38,6 +38,9 @@
 	<bean name="runner" class="org.freewheelschedule.freewheel.remoteworker.RunnerThread">
 		<property name="jobQueue" ref="jobQueue"/>
 		<property name="numberOfThreads"><value>${numberOfWorkers}</value></property>
+		<property name="timeout">
+			<value>${queueTimeout}</value>
+		</property>
 	</bean>
 	
 	<!-- The thread that listens for inbound messages to perform operations -->
