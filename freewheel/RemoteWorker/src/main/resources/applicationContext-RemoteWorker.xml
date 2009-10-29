@@ -14,8 +14,18 @@
     </bean>
 	
 	<bean name="remoteWorker" class="org.freewheelschedule.freewheel.remoteworker.RemoteWorker">
-		<property name="port"><value>${port}</value></property>
+		<property name="inboundSocket" ref="serverConnection"/>
 		<property name="numberOfWorkers"><value>${numberOfWorkers}</value></property>
+	</bean>
+	
+	<bean name="serverConnection" class="org.freewheelschedule.freewheel.common.network.FreewheelClientSocket">
+		<property name="socket" ref="listenerSocket"/>
+	</bean>
+	
+	<bean name="listenerSocket" class="org.freewheelschedule.freewheel.common.network.ServerSocketProxy">
+		<constructor-arg index="0">
+			<value>${port}</value>
+		</constructor-arg>
 	</bean>
 	
 </beans>

@@ -16,6 +16,7 @@ import lombok.Setter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
+import org.freewheelschedule.freewheel.common.network.FreewheelSocket;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -24,8 +25,8 @@ public class RemoteWorker {
 	private final static Log log = LogFactory.getLog(RemoteWorker.class);
 	
 	private @Setter int numberOfWorkers;
-	private @Setter int port;
-
+	private @Setter FreewheelSocket inboundSocket;
+	
 	private Thread listenerThread;
 	private Thread runnerThread;
 	private BlockingQueue<JobInitiationMessage> jobQueue;
@@ -48,7 +49,7 @@ public class RemoteWorker {
 		});
 		
 		if (listener instanceof ListenerThread) {
-			((ListenerThread) listener).setPort(port);
+			((ListenerThread) listener).setInboundSocket(inboundSocket);
 			((ListenerThread) listener).setJobQueue(jobQueue);
 			
 		}
