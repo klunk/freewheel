@@ -124,4 +124,41 @@ public class FreewheelSocketTest {
 		
 		assertEquals("Message returned does not match expected result", message, result);
 	}
+	
+	@Test
+	public void closeTest() {
+		//setup test
+		try {
+			context.checking(new Expectations() {{
+				oneOf (serverSocket).accept(); will(returnValue(socket));
+			}});
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		try {
+			fwSocket.waitSocket();
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		try {
+			context.checking(new Expectations() {{
+				oneOf (socket).close();
+			}});
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		try {
+			fwSocket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+	}
 }

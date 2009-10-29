@@ -30,4 +30,9 @@ public class SocketProxy implements ISocketProxy {
 		return reader.readLine();
 	}
 
+	@Override
+	public void close() throws IOException {
+		socket.close();
+	}
+
 }

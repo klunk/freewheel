@@ -26,4 +26,11 @@ public class FreewheelClientSocket implements FreewheelSocket {
 	public String readSocket() throws IOException {
 		return server.read();
 	}
+
+	@Override
+	public void close() throws IOException {
+		if (server != null) {
+			server.close();
+		}
+	}
 }
