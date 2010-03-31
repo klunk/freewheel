@@ -1,5 +1,12 @@
 package org.freewheelschedule.freewheel.controlserver;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
+import org.freewheelschedule.freewheel.common.message.JobType;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,21 +16,12 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import lombok.Setter;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
-import org.freewheelschedule.freewheel.common.message.JobType;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 
 public class ControlServer {
 
 	private final static Log log = LogFactory.getLog(ControlServer.class);
 
-	private @Setter int remotePort;
+	private int remotePort;
 	
 	public void runControlServer() {
 		

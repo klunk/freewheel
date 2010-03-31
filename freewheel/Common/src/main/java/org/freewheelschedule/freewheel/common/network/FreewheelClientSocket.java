@@ -1,17 +1,14 @@
 package org.freewheelschedule.freewheel.common.network;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
-
-import lombok.Setter;
 
 public class FreewheelClientSocket implements FreewheelSocket {
 
-	private @Setter IServerSocketProxy socket;
+	private IServerSocketProxy socket;
 	private ISocketProxy server;
 	
 	@Override
-	public void waitSocket() throws IOException, SocketTimeoutException {
+	public void waitSocket() throws IOException {
 		if (server == null) {
 			server = socket.accept();
 		}
@@ -45,4 +42,8 @@ public class FreewheelClientSocket implements FreewheelSocket {
 	public int getPort() {
 		return ((ServerSocketProxy)socket).getPort();
 	}
+
+    public void setSocket(IServerSocketProxy serverSocket) {
+        this.socket = serverSocket;
+    }
 }

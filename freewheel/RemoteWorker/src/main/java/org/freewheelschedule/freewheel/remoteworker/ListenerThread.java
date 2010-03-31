@@ -1,28 +1,25 @@
 package org.freewheelschedule.freewheel.remoteworker;
 
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.util.Queue;
-import java.util.concurrent.BlockingQueue;
-
-import lombok.Setter;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
 import org.freewheelschedule.freewheel.common.network.FreewheelSocket;
 
+import java.io.IOException;
+import java.net.SocketTimeoutException;
+import java.util.concurrent.BlockingQueue;
+
 public class ListenerThread implements Listener, Runnable {
 
 	private static Log log = LogFactory.getLog(ListenerThread.class);
 	
-	private @Setter BlockingQueue<JobInitiationMessage> jobQueue;
-	private @Setter FreewheelSocket inboundSocket;
-	private @Setter boolean continueWaiting = true;
+	private BlockingQueue<JobInitiationMessage> jobQueue;
+	private FreewheelSocket inboundSocket;
+	private boolean continueWaiting = true;
 	
 	public void run() {
 		
-		String conversation = null;
+		String conversation;
 		
 		log.info("Freewheel RemoteWorker listening on port " + inboundSocket.getPort() + " ...");
 		
@@ -62,4 +59,15 @@ public class ListenerThread implements Listener, Runnable {
 		} while (continueWaiting);
 	}
 
+    public void setContinueWaiting(boolean continueWaiting) {
+        this.continueWaiting = continueWaiting;
+    }
+
+    public void setInboundSocket(FreewheelSocket inboundSocket) {
+        this.inboundSocket = inboundSocket;
+    }
+
+    public void setJobQueue(BlockingQueue<JobInitiationMessage> jobQueue) {
+        this.jobQueue = jobQueue;
+    }
 }

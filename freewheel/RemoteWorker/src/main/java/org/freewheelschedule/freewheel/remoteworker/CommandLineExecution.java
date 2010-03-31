@@ -1,27 +1,21 @@
 package org.freewheelschedule.freewheel.remoteworker;
 
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-
-import lombok.Setter;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
+
+import java.io.*;
 
 public class CommandLineExecution implements Execution {
 
 	private static Log log = LogFactory.getLog(CommandLineExecution.class);
 	
-	private @Setter JobInitiationMessage command;
+	private JobInitiationMessage command;
 	
 	@Override
 	public void run() {
 
-		String message = null;
+		String message;
 		PrintWriter stdoutOutput = null;
 		PrintWriter stderrOutput = null;
 		
@@ -73,4 +67,8 @@ public class CommandLineExecution implements Execution {
 
 	}
 
+    @Override
+    public void setCommand(JobInitiationMessage command) {
+        this.command = command;
+    }
 }

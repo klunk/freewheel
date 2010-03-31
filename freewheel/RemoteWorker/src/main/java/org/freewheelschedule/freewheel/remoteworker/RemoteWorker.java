@@ -8,8 +8,6 @@
  */
 package org.freewheelschedule.freewheel.remoteworker;
 
-import lombok.Setter;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
@@ -19,8 +17,8 @@ public class RemoteWorker {
 
 	private final static Log log = LogFactory.getLog(RemoteWorker.class);
 	
-	private @Setter Runnable listener;
-	private @Setter Runnable runner;
+	private Runnable listener;
+	private Runnable runner;
 	
 	private Thread listenerThread;
 	private Thread runnerThread;

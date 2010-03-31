@@ -4,12 +4,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketTimeoutException;
 
-import lombok.Getter;
-
 public class ServerSocketProxy implements IServerSocketProxy {
 
 	ServerSocket serverSocket;
-	@Getter int port;
+    int port;
 	
 	public ServerSocketProxy() throws IOException {
 		serverSocket = new ServerSocket();
@@ -34,4 +32,8 @@ public class ServerSocketProxy implements IServerSocketProxy {
 		
 	}
 
+
+    public int getPort() {
+        return port;
+    }
 }
