@@ -81,6 +81,7 @@ public class ListenerThreadTest {
                 oneOf(inboundSocket).writeSocket("Enter command to run\r\n");
                 oneOf(inboundSocket).readSocket();
                 will(returnValue(gson.toJson(jim)));
+                oneOf(inboundSocket).writeSocket("Job queued\r\n");
             }});
         } catch (IOException e) {
             e.printStackTrace();

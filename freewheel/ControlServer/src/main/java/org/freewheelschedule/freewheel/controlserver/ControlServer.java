@@ -78,7 +78,12 @@ public class ControlServer {
 					command.print(gson.toJson(initiation) + "\r\n");
 					command.flush();
 				}
-				
+                response = result.readLine();
+
+                if (!response.equals("Job queued")) {
+                    log.error("Job not queued properly");
+                    return;
+                }
 			} catch (UnknownHostException e) {
 				log.error("Unable to open socket to RemoteWorker", e);
 				return;

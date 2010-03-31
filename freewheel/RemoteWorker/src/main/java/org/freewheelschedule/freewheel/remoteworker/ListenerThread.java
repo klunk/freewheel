@@ -39,6 +39,7 @@ public class ListenerThread implements Listener, Runnable {
 					log.info("Message from client: " + conversation);
 					JobInitiationMessage jobDetails = gson.fromJson(conversation, JobInitiationMessage.class);
 					jobQueue.put(jobDetails);
+                    inboundSocket.writeSocket("Job queued\r\n");
 				} else {
 					log.info("Invalid response from client: " + conversation);
 				}
