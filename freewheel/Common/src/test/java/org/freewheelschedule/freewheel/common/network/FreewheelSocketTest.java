@@ -1,10 +1,5 @@
 package org.freewheelschedule.freewheel.common.network;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.io.IOException;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -12,6 +7,13 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.io.IOException;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 @RunWith(JMock.class)
 public class FreewheelSocketTest {
@@ -21,8 +23,6 @@ public class FreewheelSocketTest {
 
 	IServerSocketProxy serverSocket = null;
 	ISocketProxy socket = null;
-	IInputStreamProxy inputStream = null;
-	IOutputStreamProxy outputStream = null;
 
 	final String message = "Test message to socket";
 
@@ -122,7 +122,7 @@ public class FreewheelSocketTest {
 			fail();
 		}
 		
-		assertEquals("Message returned does not match expected result", message, result);
+		assertThat(result, is(equalTo(message)));
 	}
 	
 	@Test

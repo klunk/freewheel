@@ -1,11 +1,5 @@
 package org.freewheelschedule.freewheel.remoteworker;
 
-import static org.junit.Assert.fail;
-
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
 import org.freewheelschedule.freewheel.common.message.JobType;
 import org.jmock.Expectations;
@@ -15,6 +9,12 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.fail;
 
 @RunWith(JMock.class)
 public class RunnerThreadTest {
@@ -57,20 +57,14 @@ public class RunnerThreadTest {
 	}
 	
 	@Test
-	public void commandReturnedFromPoll() {
+	public void commandReturnedFromPoll() throws InterruptedException {
 		final JobInitiationMessage command = new JobInitiationMessage();
 		command.setJobType(JobType.COMMAND);
 		
-		try {
 			context.checking(new Expectations() {{
 				oneOf (jobQueue).poll(timeout, TimeUnit.MILLISECONDS); will(returnValue(command));
 				oneOf (threadPool).submit(with(any(Execution.class)));
 			}});
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			fail();
-		}
-		
 		runner.run();
 	}
 }

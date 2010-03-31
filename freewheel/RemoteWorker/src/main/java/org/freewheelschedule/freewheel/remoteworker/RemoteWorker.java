@@ -16,19 +16,19 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class RemoteWorker {
 
 	private final static Log log = LogFactory.getLog(RemoteWorker.class);
-	
-	private Runnable listener;
-	private Runnable runner;
-	
-	private Thread listenerThread;
-	private Thread runnerThread;
-	
-	public void runRemoteWorker() {
-		
+
+    private Runnable listener;
+    private Runnable runner;
+
+    private Thread listenerThread;
+    private Thread runnerThread;
+
+    public void runRemoteWorker() {
+
 		log.info("Freewheel RemoteWroker running ....");
 
 		log.info("Registering the shutdown hook");
-		
+
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				log.info("Shutting down the RemoteWorker ...");
@@ -36,10 +36,10 @@ public class RemoteWorker {
 				((ListenerThread)listener).setContinueWaiting(false);
 			}
 		});
-		
+
 		listenerThread = new Thread(listener);
 		runnerThread = new Thread(runner);
-		
+
 		listenerThread.start();
 		runnerThread.start();
 		try {
@@ -47,12 +47,20 @@ public class RemoteWorker {
 		} catch (InterruptedException e) {
 			log.error("Join interrupted", e);
 		}
-		
+
 		log.info("Freewheel RemoteWorker has stopped.");
 
 	}
 
-	/**
+    public void setListener(Runnable listener) {
+        this.listener = listener;
+    }
+
+    public void setRunner(Runnable runner) {
+        this.runner = runner;
+    }
+
+    /**
 	 * main method to start the RemoteWorker processes.
 	 * @param args
 	 */

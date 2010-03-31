@@ -1,5 +1,6 @@
 package org.freewheelschedule.freewheel.remoteworker;
 
+import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
@@ -16,8 +17,9 @@ public class ListenerThread implements Listener, Runnable {
 	private BlockingQueue<JobInitiationMessage> jobQueue;
 	private FreewheelSocket inboundSocket;
 	private boolean continueWaiting = true;
-	
-	public void run() {
+    private Gson gson = new Gson();
+
+    public void run() {
 		
 		String conversation;
 		
@@ -35,7 +37,7 @@ public class ListenerThread implements Listener, Runnable {
 					inboundSocket.writeSocket("Enter command to run\r\n");
 					conversation = inboundSocket.readSocket();
 					log.info("Message from client: " + conversation);
-					JobInitiationMessage jobDetails = new JobInitiationMessage(conversation);
+					JobInitiationMessage jobDetails = gson.fromJson(conversation, JobInitiationMessage.class);
 					jobQueue.put(jobDetails);
 				} else {
 					log.info("Invalid response from client: " + conversation);

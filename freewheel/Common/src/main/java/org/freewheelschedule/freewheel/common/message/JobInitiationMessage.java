@@ -16,62 +16,6 @@ public class JobInitiationMessage {
 	private String serverMachine;
 	private Integer serverPort;
 	
-	public JobInitiationMessage() {
-		super();
-	}
-
-	public JobInitiationMessage(String serialized) {
-		super();
-		
-		String[] splitCommand = serialized.split(",");
-		for(String entry: splitCommand) {
-			if (entry.contains("command=")) {
-				if (!entry.substring(entry.indexOf("=")+1).equals("null")) {
-					command = entry.substring(entry.indexOf("=")+1);
-				} else {
-					log.error("You must supply a command value");
-					throw new JobInitiationException();
-				}
-			}
-			if (entry.contains("jobType=")) {
-				if (!entry.substring(entry.indexOf("=")+1).startsWith("null")) {
-					jobType = JobType.valueOf(entry.substring(entry.indexOf("=")+1));
-				}
-			}
-			if (entry.contains("stdout=")) {
-				if (!entry.substring(entry.indexOf("=")+1).startsWith("null")) {
-					stdout = entry.substring(entry.indexOf("=")+1);
-				}
-			}
-			if (entry.contains("appendStdout=")) {
-				appendStdout = Boolean.valueOf(entry.substring(entry.indexOf("=")+1));
-			}
-			if (entry.contains("stderr=")) {
-				if (!entry.substring(entry.indexOf("=")+1).startsWith("null")) {
-					stderr = entry.substring(entry.indexOf("=")+1);
-				}
-			}
-			if (entry.contains("appendStderr=")) {
-				appendStderr = Boolean.valueOf(entry.substring(entry.indexOf("=")+1));
-			}
-			if (entry.contains("serverMachine=")) {
-				if (!entry.substring(entry.indexOf("=")+1).startsWith("null")) {
-					serverMachine = entry.substring(entry.indexOf("=")+1);
-				}
-			}
-			if (entry.contains("serverPort=")) {
-				if (!entry.substring(entry.indexOf("=")+1).startsWith("null")) {
-					if (entry.endsWith(")")) {
-						serverPort = Integer.valueOf(entry.substring(entry.indexOf("=")+1,entry.length()-1));
-					} else {
-						serverPort = Integer.valueOf(entry.substring(entry.indexOf("=")+1));
-					}
-				}
-			}
-		}
-	}
-
-
     public String getCommand() {
         return command;
     }
@@ -115,4 +59,5 @@ public class JobInitiationMessage {
     public void setStdout(String stdout) {
         this.stdout = stdout;
     }
+
 }

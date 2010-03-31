@@ -1,5 +1,6 @@
 package org.freewheelschedule.freewheel.controlserver;
 
+import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
@@ -21,9 +22,14 @@ public class ControlServer {
 
 	private final static Log log = LogFactory.getLog(ControlServer.class);
 
-	private int remotePort;
-	
-	public void runControlServer() {
+    private int remotePort;
+    private Gson gson = new Gson();
+
+    public void setRemotePort(int remotePort) {
+        this.remotePort = remotePort;
+    }
+
+    public void runControlServer() {
 		
 		String hostname;
 		try {
@@ -68,8 +74,8 @@ public class ControlServer {
 					initiation.setStderr("stderr.log");
 					initiation.setAppendStderr(true);
 					initiation.setStdout("stdout.log");
-					log.debug(initiation);
-					command.print(initiation.toString() + "\r\n");
+					log.debug(gson.toJson(initiation));
+					command.print(gson.toJson(initiation) + "\r\n");
 					command.flush();
 				}
 				

@@ -1,17 +1,16 @@
 package org.freewheelschedule.freewheel.remoteworker;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
 import lombok.Setter;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
 import org.freewheelschedule.freewheel.common.message.JobType;
 import org.springframework.beans.factory.InitializingBean;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class RunnerThread implements Runnable, Runner, InitializingBean {
 
@@ -74,4 +73,19 @@ public class RunnerThread implements Runnable, Runner, InitializingBean {
 		continueWaiting = false;
 	}
 
+    public void setContinueWaiting(boolean continueWaiting) {
+        this.continueWaiting = continueWaiting;
+    }
+
+    public void setJobQueue(BlockingQueue<JobInitiationMessage> jobQueue) {
+        this.jobQueue = jobQueue;
+    }
+
+    public void setThreadPool(ExecutorService threadPool) {
+        this.threadPool = threadPool;
+    }
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
+    }
 }
