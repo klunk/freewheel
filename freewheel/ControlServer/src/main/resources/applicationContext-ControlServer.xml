@@ -18,6 +18,28 @@
 	
 	<bean name="controlServer" class="org.freewheelschedule.freewheel.controlserver.ControlServer">
 		<property name="remotePort"><value>${remotePort}</value></property>
+        <property name="listener" ref="listener"/>
 	</bean>
+
+    <!-- The thread that listens for inbound status messages -->
+    <bean name="listener" class="org.freewheelschedule.freewheel.controlserver.AcknowledgementListenerThread">
+        <property name="inboundSocket" ref="serverConnection"/>
+    </bean>
+
+    <!-- This bean controls the inbound connection from the central server that triggers jobs -->
+    <bean name="serverConnection" class="org.freewheelschedule.freewheel.common.network.FreewheelClientSocket">
+        <property name="socket" ref="listenerSocket"/>
+    </bean>
+
+    <!-- The actual inbound connection from the central server, uses a proxy over the standard Java ServerSocket -->
+    <bean name="listenerSocket" class="org.freewheelschedule.freewheel.common.network.ServerSocketProxy">
+        <constructor-arg index="0">
+            <value>${port}</value>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <value>${socketTimeout}</value>
+        </constructor-arg>
+    </bean>
+
 
 </beans>

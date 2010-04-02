@@ -9,10 +9,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
 import org.freewheelschedule.freewheel.common.network.FreewheelSocket;
+import org.freewheelschedule.freewheel.common.network.Listener;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.BlockingQueue;
+
+import static org.freewheelschedule.freewheel.common.message.Conversation.*;
 
 public class ListenerThread implements Listener, Runnable {
 
@@ -34,16 +37,16 @@ public class ListenerThread implements Listener, Runnable {
 			try {
 				inboundSocket.waitSocket();
 				log.info("Accepted contact from " + inboundSocket.getRemoteMachineName());
-				inboundSocket.writeSocket("HELO\r\n");
+				inboundSocket.writeSocket(HELO + "\r\n");
 				
 				conversation = inboundSocket.readSocket();
-				if (conversation.contains("HELO " + inboundSocket.getRemoteMachineName())) {
-					inboundSocket.writeSocket("Enter command to run\r\n");
+				if (conversation.contains(HELO + " " + inboundSocket.getRemoteMachineName())) {
+					inboundSocket.writeSocket(COMMAND + "\r\n");
 					conversation = inboundSocket.readSocket();
 					log.info("Message from client: " + conversation);
 					JobInitiationMessage jobDetails = gson.fromJson(conversation, JobInitiationMessage.class);
 					jobQueue.put(jobDetails);
-                    inboundSocket.writeSocket("Job queued\r\n");
+                    inboundSocket.writeSocket(CONFIRMATION + "\r\n");
 				} else {
 					log.info("Invalid response from client: " + conversation);
 				}

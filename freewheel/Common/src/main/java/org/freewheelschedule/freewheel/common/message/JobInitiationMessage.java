@@ -4,8 +4,11 @@
 
 package org.freewheelschedule.freewheel.common.message;
 
+import org.freewheelschedule.freewheel.common.helper.UidGenerator;
+
 public class JobInitiationMessage {
 
+    private Long uid;
 	private JobType jobType;
 	private String command;
 	private String stdout;
@@ -14,7 +17,15 @@ public class JobInitiationMessage {
 	private Boolean appendStderr = false;
 	private String serverMachine;
 	private Integer serverPort;
-	
+
+    public JobInitiationMessage() {
+        uid = UidGenerator.getNewUid();
+    }
+
+    public Long getUid() {
+        return uid;
+    }
+
     public String getCommand() {
         return command;
     }

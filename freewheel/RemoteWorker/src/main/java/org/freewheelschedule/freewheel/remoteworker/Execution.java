@@ -10,4 +10,6 @@ public interface Execution extends Runnable {
 
 	void setCommand(JobInitiationMessage command);
 
+    void setRemotePort(int port);
+
 }

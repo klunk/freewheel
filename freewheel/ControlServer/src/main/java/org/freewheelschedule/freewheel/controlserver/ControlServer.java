@@ -21,6 +21,8 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import static org.freewheelschedule.freewheel.common.message.Conversation.*;
+
 
 public class ControlServer {
 
@@ -28,6 +30,9 @@ public class ControlServer {
 
     private int remotePort;
     private Gson gson = new Gson();
+    private Runnable listener;
+
+    private Thread listenerThread;
 
     public void setRemotePort(int remotePort) {
         this.remotePort = remotePort;
@@ -50,8 +55,12 @@ public class ControlServer {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				log.info("Shutting down the ControlServer ...");
+                ((AcknowledgementListenerThread)listener).setContinueWaiting(false);
 			}
 		});
+
+        listenerThread = new Thread(listener);
+        listenerThread.start();
 		
 		while (true) {
 			try {
@@ -62,8 +71,8 @@ public class ControlServer {
 				BufferedReader result = new BufferedReader(new InputStreamReader(remoteWorker.getInputStream()));
 				
 				String response = result.readLine();
-				if (response.equals("HELO")) {
-					command.print("HELO " + hostname + "\r\n");
+				if (response.equals(HELO)) {
+					command.print(HELO + " " + hostname + "\r\n");
 					command.flush();
 				} else {
 					log.error("Unexpected response from RemoteClient");
@@ -71,7 +80,7 @@ public class ControlServer {
 				}
 				response = result.readLine();
 				
-				if (response.equals("Enter command to run")) {
+				if (response.equals(COMMAND)) {
 					JobInitiationMessage initiation = new JobInitiationMessage();
 					initiation.setJobType(JobType.COMMAND);
 					initiation.setCommand("java -version");
@@ -84,7 +93,7 @@ public class ControlServer {
 				}
                 response = result.readLine();
 
-                if (!response.equals("Job queued")) {
+                if (!response.equals(CONFIRMATION)) {
                     log.error("Job not queued properly");
                     return;
                 }
@@ -105,17 +114,20 @@ public class ControlServer {
 			}
 		}
 	}
-	
-	/**
+
+    public void setListener(Runnable listener) {
+        this.listener = listener;
+    }
+
+    /**
 	 * main method to start the ControlServer process.
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-ControlServer.xml");
-		
+
 		ControlServer server = (ControlServer)ctx.getBean("controlServer");
 		server.runControlServer();
 
 	}
-
 }

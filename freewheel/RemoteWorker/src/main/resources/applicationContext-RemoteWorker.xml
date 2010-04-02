@@ -4,57 +4,63 @@
   -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
 
-	<!-- application props -->
-    <bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">
-			<list>
+    <!-- application props -->
+    <bean id="propertyPlaceholderConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
                 <value>classpath:remoteworker.properties</value>
             </list>
         </property>
     </bean>
-	
-	<!-- The main controlling class for the Remote worker --> 
-	<bean name="remoteWorker" class="org.freewheelschedule.freewheel.remoteworker.RemoteWorker">
-		<property name="listener" ref="listener"/>
-		<property name="runner" ref="runner"/>
-	</bean>
-	
-	<!-- This bean controls the inbound connection from the central server that triggers jobs -->
-	<bean name="serverConnection" class="org.freewheelschedule.freewheel.common.network.FreewheelClientSocket">
-		<property name="socket" ref="listenerSocket"/>
-	</bean>
-	
-	<!-- The actual inbound connection from the central server, uses a proxy over the standard Java ServerSocket -->
-	<bean name="listenerSocket" class="org.freewheelschedule.freewheel.common.network.ServerSocketProxy">
-		<constructor-arg index="0">
-			<value>${port}</value>
-		</constructor-arg>
-		<constructor-arg index="1">
-			<value>${socketTimeout}</value>
-		</constructor-arg>
-	</bean>
-	
-	<!-- The thread that will actually execute the jobs -->
-	<bean name="runner" class="org.freewheelschedule.freewheel.remoteworker.RunnerThread">
-		<property name="jobQueue" ref="jobQueue"/>
-		<property name="numberOfThreads"><value>${numberOfWorkers}</value></property>
-		<property name="timeout">
-			<value>${queueTimeout}</value>
-		</property>
-	</bean>
-	
-	<!-- The thread that listens for inbound messages to perform operations -->
-	<bean name="listener" class="org.freewheelschedule.freewheel.remoteworker.ListenerThread">
-		<property name="inboundSocket" ref="serverConnection"/>
-		<property name="jobQueue" ref="jobQueue"/>
-	</bean>
 
-	<!-- Queue that sits between the listening thread and the working thread -->
-	<bean name="jobQueue" class="java.util.concurrent.LinkedBlockingQueue">
-	</bean>
-	
+    <!-- The main controlling class for the Remote worker -->
+    <bean name="remoteWorker" class="org.freewheelschedule.freewheel.remoteworker.RemoteWorker">
+        <property name="listener" ref="listener"/>
+        <property name="runner" ref="runner"/>
+    </bean>
+
+    <!-- This bean controls the inbound connection from the central server that triggers jobs -->
+    <bean name="serverConnection" class="org.freewheelschedule.freewheel.common.network.FreewheelClientSocket">
+        <property name="socket" ref="listenerSocket"/>
+    </bean>
+
+    <!-- The actual inbound connection from the central server, uses a proxy over the standard Java ServerSocket -->
+    <bean name="listenerSocket" class="org.freewheelschedule.freewheel.common.network.ServerSocketProxy">
+        <constructor-arg index="0">
+            <value>${port}</value>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <value>${socketTimeout}</value>
+        </constructor-arg>
+    </bean>
+
+    <!-- The thread that will actually execute the jobs -->
+    <bean name="runner" class="org.freewheelschedule.freewheel.remoteworker.RunnerThread">
+        <property name="jobQueue" ref="jobQueue"/>
+        <property name="numberOfThreads">
+            <value>${numberOfWorkers}</value>
+        </property>
+        <property name="timeout">
+            <value>${queueTimeout}</value>
+        </property>
+        <property name="remotePort">
+            <value>${remotePort}</value>
+        </property>
+    </bean>
+
+    <!-- The thread that listens for inbound messages to perform operations -->
+    <bean name="listener" class="org.freewheelschedule.freewheel.remoteworker.ListenerThread">
+        <property name="inboundSocket" ref="serverConnection"/>
+        <property name="jobQueue" ref="jobQueue"/>
+    </bean>
+
+    <!-- Queue that sits between the listening thread and the working thread -->
+    <bean name="jobQueue" class="java.util.concurrent.LinkedBlockingQueue">
+    </bean>
+
 </beans>

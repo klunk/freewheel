@@ -25,8 +25,9 @@ public class RunnerThread implements Runnable, Runner, InitializingBean {
 	private @Setter ExecutorService threadPool;
 	private @Setter boolean continueWaiting = true;
 	private @Setter int timeout;
-	
-	public RunnerThread() {
+    private int remotePort;
+
+    public RunnerThread() {
 		super();
 	}
 	
@@ -50,6 +51,7 @@ public class RunnerThread implements Runnable, Runner, InitializingBean {
 					if (command.getJobType().equals(JobType.COMMAND)) {
 						commandLine = new CommandLineExecution();
 						commandLine.setCommand(command);
+                        commandLine.setRemotePort(remotePort);
 					}
 					threadPool.submit(commandLine);
 				} else {
@@ -91,5 +93,9 @@ public class RunnerThread implements Runnable, Runner, InitializingBean {
 
     public void setTimeout(int timeout) {
         this.timeout = timeout;
+    }
+
+    public void setRemotePort(int remotePort) {
+        this.remotePort = remotePort;
     }
 }

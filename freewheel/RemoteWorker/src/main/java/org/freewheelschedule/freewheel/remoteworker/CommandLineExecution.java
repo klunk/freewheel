@@ -9,20 +9,35 @@ import org.apache.commons.logging.LogFactory;
 import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
 
 import java.io.*;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+import static org.freewheelschedule.freewheel.common.message.Conversation.COMPLETE;
+import static org.freewheelschedule.freewheel.common.message.Conversation.HELO;
 
 public class CommandLineExecution implements Execution {
 
 	private static Log log = LogFactory.getLog(CommandLineExecution.class);
 	
 	private JobInitiationMessage command;
-	
-	@Override
+    private int remotePort;
+
+    @Override
 	public void run() {
 
 		String message;
 		PrintWriter stdoutOutput = null;
 		PrintWriter stderrOutput = null;
-		
+
+        String hostname;
+        try {
+            hostname = (InetAddress.getLocalHost()).getCanonicalHostName();
+        } catch (UnknownHostException e1) {
+            log.error("Unable to determine hostname",e1);
+            return;
+        }
+
 		log.info("Running command " + command);
 
 		try {
@@ -58,6 +73,22 @@ public class CommandLineExecution implements Execution {
 				stdoutOutput = null;
 			}
 
+            Socket remoteWorker = new Socket(hostname, remotePort);
+
+            PrintWriter speak = new PrintWriter(remoteWorker.getOutputStream(), true);
+            BufferedReader result = new BufferedReader(new InputStreamReader(remoteWorker.getInputStream()));
+
+            String response = result.readLine();
+            if (response.equals(HELO)) {
+                speak.print(HELO + " " + hostname + "\r\n");
+                speak.flush();
+                speak.print(COMPLETE + " " + command.getUid() + "\r\n");
+                speak.flush();
+            } else {
+                log.error("Unexpected response from ControlServer");
+                return;
+            }
+
 		} catch (IOException e) {
 			log.error("Execution failed", e);
 		} finally {
@@ -74,5 +105,9 @@ public class CommandLineExecution implements Execution {
     @Override
     public void setCommand(JobInitiationMessage command) {
         this.command = command;
+    }
+
+    public void setRemotePort(int remotePort) {
+        this.remotePort = remotePort;
     }
 }
