@@ -9,6 +9,7 @@ public class Conversation {
     public static String COMMAND = "Enter command to run";
     public static String CONFIRMATION = "Job queued";
     public static String ACKNOWLEDGEMENT = "Message received";
+    public static String STARTED = "Job started";
     public static String COMPLETE = "Job complete";
     public static String FAILED = "Job failed";
     public static String ERROR_CODE = "with error code";

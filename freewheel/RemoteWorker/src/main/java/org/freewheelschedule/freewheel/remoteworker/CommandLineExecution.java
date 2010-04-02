@@ -13,8 +13,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import static org.freewheelschedule.freewheel.common.message.Conversation.COMPLETE;
-import static org.freewheelschedule.freewheel.common.message.Conversation.HELO;
+import static org.freewheelschedule.freewheel.common.message.Conversation.*;
 
 public class CommandLineExecution implements Execution {
 
@@ -41,6 +40,26 @@ public class CommandLineExecution implements Execution {
 		log.info("Running command " + command);
 
 		try {
+            Socket remoteWorker = new Socket(hostname, remotePort);
+
+            PrintWriter speak = new PrintWriter(remoteWorker.getOutputStream(), true);
+            BufferedReader result = new BufferedReader(new InputStreamReader(remoteWorker.getInputStream()));
+
+            String response = result.readLine();
+            if (response.equals(HELO)) {
+                speak.print(HELO + " " + hostname + "\r\n");
+                speak.flush();
+                speak.print(STARTED + " " + command.getUid() + "\r\n");
+                speak.flush();
+            } else {
+                log.error("Unexpected response from ControlServer");
+                return;
+            }
+
+            result.close();
+            speak.close();
+            remoteWorker.close();
+
 			Process process = Runtime.getRuntime().exec(command.getCommand());
 			
 			if (command.getStdout()!= null) {
@@ -73,12 +92,12 @@ public class CommandLineExecution implements Execution {
 				stdoutOutput = null;
 			}
 
-            Socket remoteWorker = new Socket(hostname, remotePort);
+            remoteWorker = new Socket(hostname, remotePort);
 
-            PrintWriter speak = new PrintWriter(remoteWorker.getOutputStream(), true);
-            BufferedReader result = new BufferedReader(new InputStreamReader(remoteWorker.getInputStream()));
+            speak = new PrintWriter(remoteWorker.getOutputStream(), true);
+            result = new BufferedReader(new InputStreamReader(remoteWorker.getInputStream()));
 
-            String response = result.readLine();
+            response = result.readLine();
             if (response.equals(HELO)) {
                 speak.print(HELO + " " + hostname + "\r\n");
                 speak.flush();
