@@ -91,7 +91,7 @@ public class ListenerThreadTest {
         thread.run();
 
         assertThat(jobQueue.size(), is(equalTo(1)));
-//        assertThat(jobQueue.take(), is(equalTo(jim)));
+        assertThat(jobQueue.take(), is(equalTo(jim)));
 
     }
 	
@@ -117,4 +117,6 @@ public class ListenerThreadTest {
 		assertThat(jobQueue.size(), is(equalTo(0)));
 
 	}
+
+
 }
