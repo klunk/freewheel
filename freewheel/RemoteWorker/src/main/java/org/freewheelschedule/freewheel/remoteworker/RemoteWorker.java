@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2010. This file is copyright SJW Computer Consultancy Ltd. The code may be modified as per the GNU Public Licence.
+ */
+
 /**
  * This class is used to start the RemoteWorker service. It contains
  * just a main method which starts a new thread process and a shutdown 
