@@ -89,6 +89,10 @@ public class CommandLineExecution implements Execution {
                 return;
             }
 
+            result.close();
+            speak.close();
+            remoteWorker.close();
+
 		} catch (IOException e) {
 			log.error("Execution failed", e);
 		} finally {
