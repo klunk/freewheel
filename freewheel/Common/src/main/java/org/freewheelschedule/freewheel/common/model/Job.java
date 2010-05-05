@@ -1,18 +1,69 @@
 package org.freewheelschedule.freewheel.common.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.List;
 
 @Entity
+@Table(name="JOB")
 public abstract class Job {
 
+    @Column(unique=true)
     Long uid;
+    @Column
     String name;
+    @Column
     String description;
+    @Column
     List<Trigger> triggers;
+    @Column
     List<Execution> executions;
+    @Column(nullable=true)
     String stdout;
+    @Column
+    Boolean appendStdout;
+    @Column(nullable=true)
     String stderr;
+    @Column
+    Boolean appendStderr;
+    @Column
+    Machine executingServer;
+
+    public Machine getExecutingServer() {
+        return executingServer;
+    }
+
+    public void setExecutingServer(Machine executingServer) {
+        this.executingServer = executingServer;
+    }
+
+    public Boolean getAppendStdout() {
+        return appendStdout;
+    }
+
+    public void setAppendStdout(Boolean appendStdout) {
+        this.appendStdout = appendStdout;
+    }
+
+    public Boolean getAppendStderr() {
+        return appendStderr;
+    }
+
+    public void setAppendStderr(Boolean appendStderr) {
+        this.appendStderr = appendStderr;
+    }
+
+    public JobType getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(JobType jobType) {
+        this.jobType = jobType;
+    }
+
+    @Column
+    JobType jobType;
 
     public Long getUid() {
         return uid;

@@ -2,11 +2,13 @@ package org.freewheelschedule.freewheel.common.model;
 
 import org.hamcrest.Description;
 
+import javax.persistence.Column;
 import java.util.Date;
 
 import static org.freewheelschedule.freewheel.common.model.TriggerType.TIMED;
 
 public class TimedTrigger extends Trigger<TimedTrigger>  {
+    @Column
     Date triggerTime;
 
     public TimedTrigger() {
