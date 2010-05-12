@@ -4,22 +4,25 @@
   -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
-	<!-- application props -->
-    <bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">
-			<list>
+    <!-- application props -->
+    <bean id="propertyPlaceholderConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
                 <value>classpath:controlserver.properties</value>
             </list>
         </property>
     </bean>
-	
-	<bean name="controlServer" class="org.freewheelschedule.freewheel.controlserver.ControlServer">
-		<property name="remotePort"><value>${remotePort}</value></property>
+
+    <bean name="controlServer" class="org.freewheelschedule.freewheel.controlserver.ControlServer">
+        <property name="remotePort">
+            <value>${remotePort}</value>
+        </property>
         <property name="listener" ref="listener"/>
-	</bean>
+    </bean>
 
     <!-- The thread that listens for inbound status messages -->
     <bean name="listener" class="org.freewheelschedule.freewheel.controlserver.AcknowledgementListenerThread">
@@ -41,5 +44,30 @@
         </constructor-arg>
     </bean>
 
+    <bean id="freewheelDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${hibernate.driverclass}" />
+        <property name="url" value="${hibernate.url}" />
+        <property name="username" value="${hibernate.user}" />
+        <property name="password" value="${hibernate.password" />
+    </bean>
+
+    <bean id="freewheelSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="freewheelDataSource"/>
+        <property name="annotatedClasses">
+            <list>
+                <value>org.freewheelschedule.freewheel.common.model.Job</value>
+                <value>org.freewheelschedule.freewheel.common.model.TimedTrigger</value>
+                <value>org.freewheelschedule.freewheel.common.model.Machine</value>
+                <value>org.freewheelschedule.freewheel.common.model.Execution</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.show_sql">${hibernate.showsql}</prop>
+                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl}</prop>
+            </props>
+        </property>
+    </bean>
 
 </beans>
