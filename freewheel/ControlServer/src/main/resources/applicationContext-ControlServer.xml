@@ -56,6 +56,7 @@
         <property name="annotatedClasses">
             <list>
                 <value>org.freewheelschedule.freewheel.common.model.Job</value>
+                <value>org.freewheelschedule.freewheel.common.model.Trigger</value>
                 <value>org.freewheelschedule.freewheel.common.model.TimedTrigger</value>
                 <value>org.freewheelschedule.freewheel.common.model.Machine</value>
                 <value>org.freewheelschedule.freewheel.common.model.Execution</value>

@@ -1,13 +1,12 @@
 package org.freewheelschedule.freewheel.common.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="MACHINE")
 public class Machine {
-    @Column(unique=true)
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     Long uid;
     @Column
     String name;

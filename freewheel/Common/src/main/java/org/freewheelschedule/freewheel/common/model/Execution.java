@@ -1,18 +1,20 @@
 package org.freewheelschedule.freewheel.common.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name="EXECUTION")
 public class Execution {
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    Long uid;
+
     @Column
     Status status;
+
     @Column
     Date executionTime;
-
     public Date getExecutionTime() {
         return executionTime;
     }
@@ -27,5 +29,13 @@ public class Execution {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Long getUid() {
+        return uid;
+    }
+
+    public void setUid(Long uid) {
+        this.uid = uid;
     }
 }

@@ -1,23 +1,22 @@
 package org.freewheelschedule.freewheel.common.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name="JOB")
 public abstract class Job {
 
-    @Column(unique=true)
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     Long uid;
     @Column
     String name;
     @Column
     String description;
-    @Column
+    @OneToMany
     List<Trigger> triggers;
-    @Column
+    @OneToMany
     List<Execution> executions;
     @Column(nullable=true)
     String stdout;
@@ -27,7 +26,7 @@ public abstract class Job {
     String stderr;
     @Column
     Boolean appendStderr;
-    @Column
+    @ManyToOne
     Machine executingServer;
 
     public Machine getExecutingServer() {

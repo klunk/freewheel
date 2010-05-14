@@ -3,17 +3,15 @@ package org.freewheelschedule.freewheel.common.model;
 import org.hamcrest.Description;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import java.util.Date;
 
-import static org.freewheelschedule.freewheel.common.model.TriggerType.TIMED;
-
+@Entity
+@DiscriminatorValue("TIMED")
 public class TimedTrigger extends Trigger<TimedTrigger>  {
     @Column
     Date triggerTime;
-
-    public TimedTrigger() {
-        triggerType = TIMED;
-    }
 
     public Date getTriggerTime() {
         return triggerTime;
