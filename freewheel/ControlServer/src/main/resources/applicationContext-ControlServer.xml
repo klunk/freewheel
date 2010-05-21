@@ -56,6 +56,7 @@
         <property name="annotatedClasses">
             <list>
                 <value>org.freewheelschedule.freewheel.common.model.Job</value>
+                <value>org.freewheelschedule.freewheel.common.model.CommandJob</value>
                 <value>org.freewheelschedule.freewheel.common.model.Trigger</value>
                 <value>org.freewheelschedule.freewheel.common.model.TimedTrigger</value>
                 <value>org.freewheelschedule.freewheel.common.model.Machine</value>
@@ -69,6 +70,9 @@
                 <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl}</prop>
             </props>
         </property>
+    </bean>
+    <bean id="jobDao" class ="org.freewheelschedule.freewheel.common.dao.JobDao">
+        <property name="sessionFactory" ref="freewheelSessionFactory" />
     </bean>
 
 </beans>

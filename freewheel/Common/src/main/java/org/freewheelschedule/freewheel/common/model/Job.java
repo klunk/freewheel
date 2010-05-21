@@ -5,6 +5,8 @@ import java.util.List;
 
 @Entity
 @Table(name="JOB")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "JobType", discriminatorType = DiscriminatorType.STRING)
 public abstract class Job {
 
     @Id
@@ -52,17 +54,6 @@ public abstract class Job {
     public void setAppendStderr(Boolean appendStderr) {
         this.appendStderr = appendStderr;
     }
-
-    public JobType getJobType() {
-        return jobType;
-    }
-
-    public void setJobType(JobType jobType) {
-        this.jobType = jobType;
-    }
-
-    @Column
-    JobType jobType;
 
     public Long getUid() {
         return uid;
