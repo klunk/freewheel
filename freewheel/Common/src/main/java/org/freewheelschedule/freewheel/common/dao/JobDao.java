@@ -4,17 +4,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.freewheelschedule.freewheel.common.model.Job;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
-public class JobDao {
-    private final static Log log = LogFactory.getLog(JobDao.class);
+import java.util.List;
 
-    SessionFactory sessionFactory;
+public class JobDao extends DefaultDao {
+    final static Log log = LogFactory.getLog(JobDao.class);
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    private final String readByIdQuery = "from Job where uid = ";
+    private final String readByNameQuery = "from Job where name = ";
+    private final String readAllQuery = "from Job";
 
     public Long create(Job job) {
         Session session = getSession();
@@ -25,19 +25,56 @@ public class JobDao {
         } catch (HibernateException e) {
             log.error("Error saving Job information", e);
         } finally {
-            if (session != null) {
-                try {
-                    session.close();
-                } catch (HibernateException e) {
-                    log.error("Failed to cleanly close the session", e);
-                }
-            }
+            close(session);
         }
             
         return job.getUid();
     }
 
-    private org.hibernate.classic.Session getSession() {
-        return sessionFactory.openSession();
+    public Job readById(Long uid) {
+        Session session = getSession();
+        Job result = null;
+
+        try {
+            Query query = session.createQuery(readByIdQuery + uid);
+            result = (Job) query.uniqueResult();
+        } catch (HibernateException e) {
+            log.error("Error saving Job information", e);
+        } finally {
+            close(session);
+        }
+
+        return result;
+    }
+
+    public Job readByName(String name) {
+        Session session = getSession();
+        Job result = null;
+
+        try {
+            Query query = session.createQuery(readByNameQuery +  "'" + name + "'");
+            result = (Job) query.uniqueResult();
+        } catch (HibernateException e) {
+            log.error("Error saving Job information", e);
+        } finally {
+            close(session);
+        }
+
+        return result;
+    }
+
+    public List<Job> read() {
+        Session session = getSession();
+        List<Job> result = null;
+
+        try {
+            Query query = session.createQuery(readAllQuery);
+            result = (List<Job>) query.list();
+        } catch (HibernateException e) {
+            log.error("Error saving Job information", e);
+        } finally {
+            close(session);
+        }
+        return result;
     }
 }

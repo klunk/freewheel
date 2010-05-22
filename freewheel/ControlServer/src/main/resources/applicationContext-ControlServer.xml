@@ -74,5 +74,7 @@
     <bean id="jobDao" class ="org.freewheelschedule.freewheel.common.dao.JobDao">
         <property name="sessionFactory" ref="freewheelSessionFactory" />
     </bean>
-
+    <bean id="machineDao" class ="org.freewheelschedule.freewheel.common.dao.MachineDao">
+        <property name="sessionFactory" ref="freewheelSessionFactory" />
+    </bean>
 </beans>

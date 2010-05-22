@@ -1,13 +1,14 @@
 package org.freewheelschedule.freewheel.common.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name="JOB")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "JobType", discriminatorType = DiscriminatorType.STRING)
-public abstract class Job {
+public abstract class Job implements Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -109,5 +110,9 @@ public abstract class Job {
 
     public void setStderr(String stderr) {
         this.stderr = stderr;
+    }
+
+    public String toString() {
+        return "uid: " + uid.toString() + " name: " + name;
     }
 }
