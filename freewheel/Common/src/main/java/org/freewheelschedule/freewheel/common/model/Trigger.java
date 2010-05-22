@@ -8,7 +8,6 @@ import javax.persistence.*;
 @Table(name = "TRIGGER")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TriggerType", discriminatorType = DiscriminatorType.STRING)
-@DiscriminatorValue("BASIC")
 public abstract class Trigger<T> extends TypeSafeMatcher<T> {
 
     @Id

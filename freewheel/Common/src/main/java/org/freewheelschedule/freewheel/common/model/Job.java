@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+import static javax.persistence.FetchType.EAGER;
+
 @Entity
 @Table(name="JOB")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -13,11 +15,11 @@ public abstract class Job implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     Long uid;
-    @Column
+    @Column(unique=true)
     String name;
     @Column
     String description;
-    @OneToMany
+    @OneToMany(fetch=EAGER)
     List<Trigger> triggers;
     @OneToMany
     List<Execution> executions;
@@ -29,7 +31,7 @@ public abstract class Job implements Serializable {
     String stderr;
     @Column
     Boolean appendStderr;
-    @ManyToOne
+    @ManyToOne(fetch=EAGER)
     Machine executingServer;
 
     public Machine getExecutingServer() {

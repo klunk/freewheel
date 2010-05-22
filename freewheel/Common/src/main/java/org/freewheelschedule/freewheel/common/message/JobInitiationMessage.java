@@ -70,6 +70,10 @@ public class JobInitiationMessage {
         this.stdout = stdout;
     }
 
+    public void setAppendStdout(boolean appendStdout) {
+        this.appendStdout = appendStdout;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
