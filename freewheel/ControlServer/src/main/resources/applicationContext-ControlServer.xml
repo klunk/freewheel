@@ -22,7 +22,7 @@
             <value>${remotePort}</value>
         </property>
         <property name="listener" ref="listener"/>
-        <property name="jobDao" ref="jobDao"/>
+        <property name="triggerDao" ref="triggerDao"/>
     </bean>
 
     <!-- The thread that listens for inbound status messages -->

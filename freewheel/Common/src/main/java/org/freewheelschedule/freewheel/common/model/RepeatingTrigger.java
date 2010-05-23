@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 @Entity
 @DiscriminatorValue("REPEATING")
@@ -39,5 +40,11 @@ public class RepeatingTrigger extends Trigger<RepeatingTrigger>  {
     @Override
     public void describeTo(Description description) {
         description.appendText("Repeating Trigger Matcher");
+    }
+
+    @Override
+    public boolean isTriggered() {
+        Date now = new GregorianCalendar().getTime();
+        return (triggerTime.compareTo(now) < 0);
     }
 }

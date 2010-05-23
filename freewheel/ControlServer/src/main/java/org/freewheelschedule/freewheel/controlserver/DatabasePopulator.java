@@ -50,6 +50,8 @@ public class DatabasePopulator {
 
         jobDao.create(job);
 
+        trigger.setJob(job);
+        triggerDao.create(trigger);
         job = new CommandJob();
 
         job.setName("Test Job2");

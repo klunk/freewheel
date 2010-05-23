@@ -7,10 +7,13 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import java.util.List;
+
 public class TriggerDao extends DefaultDao {
     final static Log log = LogFactory.getLog(TriggerDao.class);
 
-    private final String readQuery = "from Trigger where uid = ";
+    private final String readByIdQuery = "from Trigger where uid = ";
+    private final String readQuery = "from Trigger";
 
     public Long create(Trigger trigger) {
         Session session = getSession();
@@ -27,13 +30,27 @@ public class TriggerDao extends DefaultDao {
         return trigger.getUid();
     }
 
-    public Trigger read(Long uid) {
+    public Trigger readById(Long uid) {
         Session session = getSession();
         Trigger result = null;
 
         try {
-            Query query = session.createQuery(readQuery + uid);
+            Query query = session.createQuery(readByIdQuery + uid);
             result = (Trigger) query.uniqueResult();
+        } finally {
+            close(session);
+        }
+
+        return result;
+    }
+
+    public List<Trigger> read() {
+        Session session = getSession();
+        List<Trigger> result = null;
+
+        try {
+            Query query = session.createQuery(readQuery);
+            result = (List<Trigger>) query.list();
         } finally {
             close(session);
         }

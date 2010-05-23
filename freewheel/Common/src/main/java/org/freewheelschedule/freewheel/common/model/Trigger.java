@@ -13,6 +13,8 @@ public abstract class Trigger<T> extends TypeSafeMatcher<T> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long uid;
+    @OneToOne(fetch=FetchType.EAGER)
+    Job job;
 
     public Long getUid() {
         return uid;
@@ -21,4 +23,15 @@ public abstract class Trigger<T> extends TypeSafeMatcher<T> {
     public void setUid(Long uid) {
         this.uid = uid;
     }
+
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
+    }
+
+    @Transient
+    public abstract boolean isTriggered();
 }
