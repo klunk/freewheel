@@ -28,6 +28,7 @@
     <!-- The thread that listens for inbound status messages -->
     <bean name="listener" class="org.freewheelschedule.freewheel.controlserver.AcknowledgementListenerThread">
         <property name="inboundSocket" ref="serverConnection"/>
+        <property name="triggerDao" ref="triggerDao"/>
     </bean>
 
     <!-- This bean controls the inbound connection from the central server that triggers jobs -->

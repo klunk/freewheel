@@ -14,6 +14,7 @@ public class TriggerDao extends DefaultDao {
 
     private final String readByIdQuery = "from Trigger where uid = ";
     private final String readQuery = "from Trigger";
+    private final String readByJobIdQuery = "from Trigger where job_uid = ";
 
     public Long create(Trigger trigger) {
         Session session = getSession();
@@ -36,6 +37,20 @@ public class TriggerDao extends DefaultDao {
 
         try {
             Query query = session.createQuery(readByIdQuery + uid);
+            result = (Trigger) query.uniqueResult();
+        } finally {
+            close(session);
+        }
+
+        return result;
+    }
+
+    public Trigger readByJobId(Long uid) {
+        Session session = getSession();
+        Trigger result = null;
+
+        try {
+            Query query = session.createQuery(readByJobIdQuery + uid);
             result = (Trigger) query.uniqueResult();
         } finally {
             close(session);

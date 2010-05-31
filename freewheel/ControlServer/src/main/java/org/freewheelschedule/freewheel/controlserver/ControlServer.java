@@ -82,6 +82,7 @@ public class ControlServer {
         log.info("Initializing jobs");
         initializeJobs();
 
+        ((AcknowledgementListenerThread) listener).setTriggerQueue(triggerQueue);
         listenerThread = new Thread(listener);
         listenerThread.start();
 
@@ -111,6 +112,7 @@ public class ControlServer {
 
                         if (response.equals(COMMAND) && jobToRun instanceof CommandJob) {
                             JobInitiationMessage initiation = new JobInitiationMessage();
+                            initiation.setUid(jobToRun.getUid());
                             initiation.setJobType(JobType.COMMAND);
                             initiation.setCommand(((CommandJob) jobToRun).getCommand());
                             initiation.setStderr(jobToRun.getStderr());

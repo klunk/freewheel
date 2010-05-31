@@ -4,9 +4,12 @@
 
 package org.freewheelschedule.freewheel.remoteworker;
 
+import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
+import org.freewheelschedule.freewheel.common.message.JobResponseMessage;
+import org.freewheelschedule.freewheel.common.model.Status;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -28,6 +31,8 @@ public class CommandLineExecution implements Execution {
 		String message;
 		PrintWriter stdoutOutput = null;
 		PrintWriter stderrOutput = null;
+        JobResponseMessage responseMessage = new JobResponseMessage();
+        Gson gson = new Gson();
 
         String hostname;
         try {
@@ -49,7 +54,10 @@ public class CommandLineExecution implements Execution {
             if (response.equals(HELO)) {
                 speak.print(HELO + " " + hostname + "\r\n");
                 speak.flush();
-                speak.print(STARTED + " " + command.getUid() + "\r\n");
+                responseMessage.setUid(command.getUid());
+                responseMessage.setStatus(Status.STARTED);
+                responseMessage.setMessage(STARTED + " " + command.getUid());
+                speak.print(gson.toJson(responseMessage) + "\r\n");
                 speak.flush();
             } else {
                 log.error("Unexpected response from ControlServer");
@@ -101,7 +109,11 @@ public class CommandLineExecution implements Execution {
             if (response.equals(HELO)) {
                 speak.print(HELO + " " + hostname + "\r\n");
                 speak.flush();
-                speak.print(COMPLETE + " " + command.getUid() + "\r\n");
+                responseMessage.setUid(command.getUid());
+                responseMessage.setStatus(process.exitValue()==0 ? Status.SUCCESS : Status.FAILURE);
+                responseMessage.setExitValue(process.exitValue());
+                responseMessage.setMessage(COMPLETE + " " + command.getUid());
+                speak.print(gson.toJson(responseMessage) + "\r\n");
                 speak.flush();
             } else {
                 log.error("Unexpected response from ControlServer");
