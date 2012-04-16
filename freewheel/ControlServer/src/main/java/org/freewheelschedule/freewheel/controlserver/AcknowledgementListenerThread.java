@@ -19,11 +19,11 @@ package org.freewheelschedule.freewheel.controlserver;
 import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.freewheelschedule.freewheel.common.dao.ExecutionDao;
+import org.freewheelschedule.freewheel.common.dao.JobDao;
 import org.freewheelschedule.freewheel.common.dao.TriggerDao;
 import org.freewheelschedule.freewheel.common.message.JobResponseMessage;
-import org.freewheelschedule.freewheel.common.model.RepeatingTrigger;
-import org.freewheelschedule.freewheel.common.model.Status;
-import org.freewheelschedule.freewheel.common.model.Trigger;
+import org.freewheelschedule.freewheel.common.model.*;
 import org.freewheelschedule.freewheel.common.network.FreewheelSocket;
 
 import java.io.IOException;
@@ -43,6 +43,10 @@ public class AcknowledgementListenerThread implements Runnable {
     private BlockingQueue<Trigger> triggerQueue;
 
     private TriggerDao triggerDao;
+
+    private JobDao jobDao;
+
+    private ExecutionDao executionDao;
 
     @Override
     public void run() {
@@ -65,6 +69,7 @@ public class AcknowledgementListenerThread implements Runnable {
                     log.debug("Json from client: " + conversation);
                     log.info("Message from client: " + responseMessage.getMessage());
                     inboundSocket.writeSocket(ACKNOWLEDGEMENT + "\r\n");
+                    storeExecutionStatus(responseMessage);
                     if (responseMessage.getStatus() == Status.SUCCESS) {
                         setNextTrigger(responseMessage);
                     }
@@ -85,6 +90,16 @@ public class AcknowledgementListenerThread implements Runnable {
             }
 
         } while (continueWaiting);
+    }
+
+    private void storeExecutionStatus(JobResponseMessage responseMessage) {
+        Job job = jobDao.readById(responseMessage.getUid());
+        Execution execution = new Execution();
+        execution.setExecutionTime((new GregorianCalendar()).getTime());
+        execution.setStatus(responseMessage.getStatus());
+        executionDao.create(execution);
+        job.getExecutions().add(execution);
+        jobDao.create(job);
     }
 
     private void setNextTrigger(JobResponseMessage responseMessage) {
@@ -114,6 +129,14 @@ public class AcknowledgementListenerThread implements Runnable {
 
     public void setTriggerDao(TriggerDao triggerDao) {
         this.triggerDao = triggerDao;
+    }
+
+    public void setJobDao(JobDao jobDao) {
+        this.jobDao = jobDao;
+    }
+
+    public void setExecutionDao(ExecutionDao executionDao) {
+        this.executionDao = executionDao;
     }
 
 }

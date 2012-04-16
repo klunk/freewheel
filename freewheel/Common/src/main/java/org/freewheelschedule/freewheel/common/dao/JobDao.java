@@ -54,6 +54,7 @@ public class JobDao extends DefaultDao {
         try {
             Query query = session.createQuery(readByIdQuery + uid);
             result = (Job) query.uniqueResult();
+            result.getExecutions().size();
         } catch (HibernateException e) {
             log.error("Error saving Job information", e);
         } finally {
@@ -92,5 +93,10 @@ public class JobDao extends DefaultDao {
             close(session);
         }
         return result;
+    }
+
+    public void loadLazyCollections(Job job) {
+        Session session = getSession();
+        session.refresh(job);
     }
 }

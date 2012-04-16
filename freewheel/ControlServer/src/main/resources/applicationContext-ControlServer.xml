@@ -42,6 +42,8 @@
     <bean name="listener" class="org.freewheelschedule.freewheel.controlserver.AcknowledgementListenerThread">
         <property name="inboundSocket" ref="serverConnection"/>
         <property name="triggerDao" ref="triggerDao"/>
+        <property name="jobDao" ref="jobDao"/>
+        <property name="executionDao" ref="executionDao"/>
     </bean>
 
     <!-- This bean controls the inbound connection from the central server that triggers jobs -->
@@ -94,6 +96,9 @@
         <property name="sessionFactory" ref="freewheelSessionFactory" />
     </bean>
     <bean id="triggerDao" class ="org.freewheelschedule.freewheel.common.dao.TriggerDao">
+        <property name="sessionFactory" ref="freewheelSessionFactory" />
+    </bean>
+    <bean id="executionDao" class ="org.freewheelschedule.freewheel.common.dao.ExecutionDao">
         <property name="sessionFactory" ref="freewheelSessionFactory" />
     </bean>
 </beans>
