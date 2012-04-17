@@ -63,7 +63,7 @@ public class AcknowledgementListenerThread implements Runnable {
                 inboundSocket.writeSocket(HELO + "\r\n");
 
                 conversation = inboundSocket.readSocket();
-                if (conversation.contains(HELO + " " + inboundSocket.getRemoteMachineName())) {
+                if (conversation.contains(HELO)) {
                     conversation = inboundSocket.readSocket();
                     JobResponseMessage responseMessage = gson.fromJson(conversation, JobResponseMessage.class);
                     log.debug("Json from client: " + conversation);

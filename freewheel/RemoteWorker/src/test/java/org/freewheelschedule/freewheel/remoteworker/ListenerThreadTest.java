@@ -88,7 +88,7 @@ public class ListenerThreadTest {
                 oneOf(inboundSocket).getPort();
                 will(returnValue(123));
                 oneOf(inboundSocket).waitSocket();
-                exactly(2).of(inboundSocket).getRemoteMachineName();
+                oneOf(inboundSocket).getRemoteMachineName();
                 will(returnValue("Dummy machine"));
                 oneOf(inboundSocket).close();
                 oneOf(inboundSocket).writeSocket("HELO\r\n");
@@ -118,10 +118,10 @@ public class ListenerThreadTest {
 			context.checking(new Expectations() {{
 				oneOf         (inboundSocket).getPort(); will(returnValue(123));
 				oneOf         (inboundSocket).waitSocket();
-				exactly(2).of (inboundSocket).getRemoteMachineName(); will(returnValue("Dummy machine"));
+				oneOf         (inboundSocket) .getRemoteMachineName(); will(returnValue("Dummy machine"));
 				oneOf         (inboundSocket).close();
 				oneOf         (inboundSocket).writeSocket("HELO\r\n");
-				oneOf         (inboundSocket).readSocket(); will(returnValue("HELO failure"));
+				oneOf         (inboundSocket).readSocket(); will(returnValue("HELLO failure"));
 			}});
 		} catch (IOException e) {
 			e.printStackTrace();
