@@ -112,7 +112,7 @@ public class ListenerThreadTest {
     }
 	
 	@Test
-	public void invalidconversationTest() {
+	public void invalidConversationTest() {
 		
 		try {
 			context.checking(new Expectations() {{
