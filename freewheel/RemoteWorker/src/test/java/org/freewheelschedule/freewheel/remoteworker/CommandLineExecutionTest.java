@@ -16,15 +16,24 @@
 
 package org.freewheelschedule.freewheel.remoteworker;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import org.junit.Before;
+import org.junit.Test;
 
-@RunWith(Suite.class)
-@SuiteClasses({
-//		ListenerThreadTest.class,
-//		RunnerThreadTest.class
-})
-public class TestSuite {
+/**
+ * Created with IntelliJ IDEA.
+ * User: simon
+ * Date: 22/05/12
+ * Time: 22:26
+ * To change this template use File | Settings | File Templates.
+ */
+public class CommandLineExecutionTest {
+    @Before
+    public void setUp() throws Exception {
 
+    }
+
+    @Test
+    public void testRun() throws Exception {
+
+    }
 }
