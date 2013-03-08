@@ -30,66 +30,77 @@ import java.util.concurrent.TimeUnit;
 
 public class RunnerThread implements Runnable, Runner, InitializingBean {
 
-	private static Log log = LogFactory.getLog(RunnerThread.class);
-	
-	private @Setter int numberOfThreads;
-	private @Setter BlockingQueue<JobInitiationMessage> jobQueue;
-	private @Setter ExecutorService threadPool;
-	private @Setter boolean continueWaiting = true;
-	private @Setter int timeout;
+    private static Log log = LogFactory.getLog(RunnerThread.class);
+
+    private
+    @Setter
+    int numberOfThreads;
+    private
+    @Setter
+    BlockingQueue<JobInitiationMessage> jobQueue;
+    private
+    @Setter
+    ExecutorService threadPool;
+    private
+    @Setter
+    boolean continueWaiting = true;
+    private
+    @Setter
+    int timeout;
     private int remotePort;
 
     public RunnerThread() {
-		super();
-	}
-	
-	public RunnerThread(int numberOfThreads) {
-		this.numberOfThreads = numberOfThreads;
-		createThreadPool();
-	}
-	
-	@Override
-	public void run() {
-		log.info("Worker thread is running.");
-	
-		Execution commandLine = null;
-		
-		do {
-			try {
-				log.debug("Waiting for command to come from listener.");
-				JobInitiationMessage command = jobQueue.poll(timeout, TimeUnit.MILLISECONDS);
-				if(command != null) {
-					log.info("Command received: " + command);
-					if (command.getJobType().equals(JobType.COMMAND)) {
-						commandLine = new CommandLineExecution();
-						commandLine.setCommand(command);
-                        commandLine.setRemotePort(remotePort);
-					}
-					threadPool.submit(commandLine);
-				} else {
-					log.info("Timeout waiting for jobQueue");
-				}
-			} catch (InterruptedException e) { 
-				log.error("RunnerThread sleep was interrupted", e);
-			}
-		} while(continueWaiting);
+        super();
+    }
 
-	}
-	
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		if (threadPool == null) {
-			createThreadPool();
-		}
-	}
-	private void createThreadPool() {
-		threadPool = Executors.newFixedThreadPool(numberOfThreads);
-	}
-	
-	public void stopExecutions() {
-		threadPool.shutdownNow();
-		continueWaiting = false;
-	}
+    public RunnerThread(int numberOfThreads) {
+        this.numberOfThreads = numberOfThreads;
+        createThreadPool();
+    }
+
+    @Override
+    public void run() {
+        log.info("Worker thread is running.");
+
+        Execution commandLine = null;
+
+        do {
+            try {
+                log.debug("Waiting for command to come from listener.");
+                JobInitiationMessage command = jobQueue.poll(timeout, TimeUnit.MILLISECONDS);
+                if (command != null) {
+                    log.info("Command received: " + command);
+                    if (command.getJobType().equals(JobType.COMMAND)) {
+                        commandLine = new CommandLineExecution();
+                        commandLine.setCommand(command);
+                        commandLine.setRemotePort(remotePort);
+                    }
+                    threadPool.submit(commandLine);
+                } else {
+                    log.info("Timeout waiting for jobQueue");
+                }
+            } catch (InterruptedException e) {
+                log.error("RunnerThread sleep was interrupted", e);
+            }
+        } while (continueWaiting);
+
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        if (threadPool == null) {
+            createThreadPool();
+        }
+    }
+
+    private void createThreadPool() {
+        threadPool = Executors.newFixedThreadPool(numberOfThreads);
+    }
+
+    public void stopExecutions() {
+        threadPool.shutdownNow();
+        continueWaiting = false;
+    }
 
     public void setContinueWaiting(boolean continueWaiting) {
         this.continueWaiting = continueWaiting;
