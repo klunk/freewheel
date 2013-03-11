@@ -35,14 +35,10 @@ import java.util.concurrent.BlockingQueue;
 import static org.freewheelschedule.freewheel.common.message.Conversation.ACKNOWLEDGEMENT;
 import static org.freewheelschedule.freewheel.common.message.Conversation.HELO;
 
-public class AcknowledgementListenerThread implements Runnable {
+public class AcknowledgementListenerThread extends FreewheelAbstractRunnable {
 
     private static Log log = LogFactory.getLog(AcknowledgementListenerThread.class);
     private FreewheelSocket inboundSocket;
-    private boolean continueWaiting = true;
-    private BlockingQueue<Trigger> triggerQueue;
-
-    private TriggerDao triggerDao;
 
     private JobDao jobDao;
 
@@ -117,18 +113,6 @@ public class AcknowledgementListenerThread implements Runnable {
 
     public void setInboundSocket(FreewheelSocket inboundSocket) {
         this.inboundSocket = inboundSocket;
-    }
-
-    public void setContinueWaiting(boolean continueWaiting) {
-        this.continueWaiting = continueWaiting;
-    }
-
-    public void setTriggerQueue(BlockingQueue<Trigger> triggerQueue) {
-        this.triggerQueue = triggerQueue;
-    }
-
-    public void setTriggerDao(TriggerDao triggerDao) {
-        this.triggerDao = triggerDao;
     }
 
     public void setJobDao(JobDao jobDao) {

@@ -31,11 +31,8 @@
     </bean>
 
     <bean name="controlServer" class="org.freewheelschedule.freewheel.controlserver.ControlServer">
-        <property name="remotePort">
-            <value>${remotePort}</value>
-        </property>
         <property name="listener" ref="listener"/>
-        <property name="triggerDao" ref="triggerDao"/>
+        <property name="controller" ref="controller"/>
     </bean>
 
     <!-- The thread that listens for inbound status messages -->
@@ -44,6 +41,11 @@
         <property name="triggerDao" ref="triggerDao"/>
         <property name="jobDao" ref="jobDao"/>
         <property name="executionDao" ref="executionDao"/>
+    </bean>
+
+    <!-- The thread that listens for inbound status messages -->
+    <bean name="controller" class="org.freewheelschedule.freewheel.controlserver.ControlThread">
+        <property name="triggerDao" ref="triggerDao"/>
     </bean>
 
     <!-- This bean controls the inbound connection from the central server that triggers jobs -->

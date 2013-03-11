@@ -55,9 +55,9 @@
     <!-- The thread that will actually execute the jobs -->
     <bean name="runner" class="org.freewheelschedule.freewheel.remoteworker.RunnerThread">
         <property name="jobQueue" ref="jobQueue"/>
-        <property name="numberOfThreads">
+        <constructor-arg index="0">
             <value>${numberOfWorkers}</value>
-        </property>
+        </constructor-arg>
         <property name="timeout">
             <value>${queueTimeout}</value>
         </property>
