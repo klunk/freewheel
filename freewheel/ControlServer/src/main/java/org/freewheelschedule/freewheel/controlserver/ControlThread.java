@@ -58,69 +58,71 @@ public class ControlThread extends FreewheelAbstractRunnable {
 
         do {
             try {
-                Trigger firedTrigger = triggerQueue.peek();
-                Job jobToRun = null;
-                if (firedTrigger != null && firedTrigger.isTriggered()) {
-                    jobToRun = firedTrigger.getJob();
-                    triggerQueue.remove(firedTrigger);
-                    if (jobToRun != null) {
-                        log.debug("Connecting to the RemoteWorker to run a command");
-                        Socket remoteWorker = new Socket(jobToRun.getExecutingServer().getName(), jobToRun.getExecutingServer().getPort().intValue());
-
-                        PrintWriter command = new PrintWriter(remoteWorker.getOutputStream(), true);
-                        BufferedReader result = new BufferedReader(new InputStreamReader(remoteWorker.getInputStream()));
-
-                        String response = result.readLine();
-                        if (response.equals(HELO)) {
-                            command.print(HELO + " " + hostname + "\r\n");
-                            command.flush();
-                        } else {
-                            log.error("Unexpected response from RemoteClient");
-                            return;
+                try {
+                    Trigger firedTrigger = triggerQueue.peek();
+                    Job jobToRun = null;
+                    if (firedTrigger != null && firedTrigger.isTriggered()) {
+                        jobToRun = firedTrigger.getJob();
+                        if (jobToRun != null) {
+                            runJob(hostname, jobToRun);
                         }
-                        response = result.readLine();
-
-                        if (response.equals(COMMAND) && jobToRun instanceof CommandJob) {
-                            JobInitiationMessage initiation = new JobInitiationMessage();
-                            initiation.setUid(jobToRun.getUid());
-                            initiation.setJobType(JobType.COMMAND);
-                            initiation.setCommand(((CommandJob) jobToRun).getCommand());
-                            initiation.setStderr(jobToRun.getStderr());
-                            initiation.setAppendStderr(jobToRun.getAppendStderr());
-                            initiation.setStdout(jobToRun.getStdout());
-                            initiation.setAppendStdout(jobToRun.getAppendStderr());
-                            log.debug(gson.toJson(initiation));
-                            command.print(gson.toJson(initiation) + "\r\n");
-                            command.flush();
-                        }
-                        response = result.readLine();
-
-                        if (!response.equals(CONFIRMATION)) {
-                            log.error("Job not queued properly");
-                            return;
-                        }
+                        triggerQueue.remove(firedTrigger);
                     }
-                } else {
+                } catch (UnknownHostException e) {
+                    log.error("Unable to open socket to RemoteWorker", e);
+                } catch (SocketException e) {
+                    log.error("RemoteWorker is currently unavailable.", e);
+                } catch (IOException e) {
+                    log.error("Unable to communicate with RemoteWorker", e);
+                } finally {
                     Thread.sleep(1000);
                 }
-            } catch (UnknownHostException e) {
-                log.error("Unable to open socket to RemoteWorker", e);
-                return;
-            } catch (SocketException e) {
-                log.error("RemoteWorker is currently unavailable.", e);
-            } catch (IOException e) {
-                log.error("Unable to communicate with RemoteWorker", e);
-                return;
             } catch (InterruptedException e) {
                 log.error("Control thread interrupted waiting for jobs", e);
             }
-
-//            try {
-//                Thread.sleep(10000);
-//            } catch (InterruptedException e) {
-//                log.error("Sleep interrupted, continuing.", e);
-//            }
         } while (continueWaiting);
+    }
+
+    private void runJob(String hostname, Job jobToRun) throws IOException {
+        log.debug("Connecting to the RemoteWorker to run a command");
+        Socket remoteWorker = new Socket(jobToRun.getExecutingServer().getName(), jobToRun.getExecutingServer().getPort().intValue());
+
+        PrintWriter command = new PrintWriter(remoteWorker.getOutputStream(), true);
+        BufferedReader result = new BufferedReader(new InputStreamReader(remoteWorker.getInputStream()));
+
+        if (workerAwaitingCommand(result, command, hostname) && jobToRun instanceof CommandJob) {
+            if (!sendCommandToExecute(jobToRun, result, command)) {
+                log.error("Job not queued properly");
+            } else {
+                log.error("Unexpected response from RemoteClient");
+            }
+        }
+    }
+
+    private boolean sendCommandToExecute(Job jobToRun, BufferedReader result, PrintWriter command) throws IOException {
+        JobInitiationMessage initiation = new JobInitiationMessage();
+        initiation.setUid(jobToRun.getUid());
+        initiation.setJobType(JobType.COMMAND);
+        initiation.setCommand(((CommandJob) jobToRun).getCommand());
+        initiation.setStderr(jobToRun.getStderr());
+        initiation.setAppendStderr(jobToRun.getAppendStderr());
+        initiation.setStdout(jobToRun.getStdout());
+        initiation.setAppendStdout(jobToRun.getAppendStderr());
+        log.debug(gson.toJson(initiation));
+        command.print(gson.toJson(initiation) + "\r\n");
+        command.flush();
+        return result.readLine().equals(CONFIRMATION);
+    }
+
+
+    private boolean workerAwaitingCommand(BufferedReader result, PrintWriter command, String hostname) throws IOException {
+        String response = result.readLine();
+        if (response.equals(HELO)) {
+            command.print(HELO + " " + hostname + "\r\n");
+            command.flush();
+            response = result.readLine();
+        }
+        return response.equals(COMMAND);
     }
 
     @Transactional
