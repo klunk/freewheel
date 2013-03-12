@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.freewheelschedule.freewheel.controlserver;
+package org.freewheelschedule.freewheel.common.util;
 
 import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
@@ -28,6 +28,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DatabasePopulator {
@@ -38,7 +39,7 @@ public class DatabasePopulator {
 
     @Transactional
     public static void main(String[] args) {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-ControlServer.xml");
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-CommonUtil.xml");
         JobDao jobDao = (JobDao) ctx.getBean("jobDao");
         MachineDao machineDao = (MachineDao) ctx.getBean("machineDao");
         TriggerDao triggerDao = (TriggerDao) ctx.getBean("triggerDao");
@@ -68,23 +69,36 @@ public class DatabasePopulator {
 
         trigger.setJob(job);
         triggerDao.create(trigger);
-        job = new CommandJob();
 
-        job.setName("Test Job2");
-        job.setCommand("java -version");
-        job.setStderr("stderr.log");
-        job.setStdout("stdout.log");
-        job.setAppendStderr(true);
-        job.setExecutingServer(machine);
+        TimedTrigger timedTrigger = new TimedTrigger();
+        Date triggerDate = new Date();
+        triggerDate.setTime(triggerDate.getTime() + 6000);
+        timedTrigger.setTriggerTime(triggerDate);
+        triggerDao.create(timedTrigger);
 
-        jobDao.create(job);
+        List<Trigger> timedTriggers = new ArrayList<Trigger>();
+        timedTriggers.add(timedTrigger);
+
+        CommandJob job2 = new CommandJob();
+
+        job2.setName("Test Job2");
+        job2.setCommand("java -version");
+        job2.setStderr("stderr.log");
+        job2.setStdout("stdout.log");
+        job2.setAppendStderr(true);
+        job2.setExecutingServer(machine);
+        job2.setTriggers(timedTriggers);
+        jobDao.create(job2);
+
+        timedTrigger.setJob(job2);
+        triggerDao.create(timedTrigger);
 
         Job readJob = jobDao.readByName("Test Job");
         log.info("Record read: " + readJob);
 
-        readJob = jobDao.readById(9999L);
-        log.info("Record read: " + readJob);
-
+//        readJob = jobDao.readById(9999L);
+//        log.info("Record read: " + readJob);
+//
         List<Job> jobs = jobDao.read();
         for (Job job1 : jobs) {
             log.info("All jobs read: " + job1);

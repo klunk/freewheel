@@ -103,13 +103,14 @@ public class AcknowledgementListenerThread extends FreewheelAbstractRunnable {
         if (trigger instanceof RepeatingTrigger) {
             Date triggerTime = new Date(new GregorianCalendar().getTimeInMillis() + ((RepeatingTrigger) trigger).getTriggerInterval());
             ((RepeatingTrigger) trigger).setTriggerTime(triggerTime);
-        }
-        try {
-            triggerQueue.put(trigger);
-        } catch (InterruptedException e) {
-            log.error("Interrupted adding trigger to Queue", e);
+            try {
+                triggerQueue.put(trigger);
+            } catch (InterruptedException e) {
+                log.error("Interrupted adding trigger to Queue", e);
+            }
         }
     }
+
 
     public void setInboundSocket(FreewheelSocket inboundSocket) {
         this.inboundSocket = inboundSocket;

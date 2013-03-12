@@ -26,18 +26,7 @@ import java.util.GregorianCalendar;
 
 @Entity
 @DiscriminatorValue("TIMED")
-public class TimedTrigger extends Trigger<TimedTrigger>  {
-    @Column
-    Date triggerTime;
-
-    public Date getTriggerTime() {
-        return triggerTime;
-    }
-
-    public void setTriggerTime(Date triggerTime) {
-        this.triggerTime = triggerTime;
-    }
-
+public class TimedTrigger extends TriggerWithTime<TimedTrigger>  {
     @Override
     public boolean matchesSafely(TimedTrigger trigger) {
         return this.triggerTime.equals(trigger.getTriggerTime());
@@ -46,11 +35,5 @@ public class TimedTrigger extends Trigger<TimedTrigger>  {
     @Override
     public void describeTo(Description description) {
         description.appendText("Timed Trigger Matcher");
-    }
-
-    @Override
-    public boolean isTriggered() {
-        Date now = new GregorianCalendar().getTime();
-        return (triggerTime.compareTo(now) < 0);
     }
 }

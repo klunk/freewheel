@@ -26,19 +26,9 @@ import java.util.GregorianCalendar;
 
 @Entity
 @DiscriminatorValue("REPEATING")
-public class RepeatingTrigger extends Trigger<RepeatingTrigger>  {
-    @Column
-    Date triggerTime;
+public class RepeatingTrigger extends TriggerWithTime<RepeatingTrigger>  {
     @Column
     Long triggerInterval;
-
-    public Date getTriggerTime() {
-        return triggerTime;
-    }
-
-    public void setTriggerTime(Date triggerTime) {
-        this.triggerTime = triggerTime;
-    }
 
     public Long getTriggerInterval() {
         return triggerInterval;
@@ -56,11 +46,5 @@ public class RepeatingTrigger extends Trigger<RepeatingTrigger>  {
     @Override
     public void describeTo(Description description) {
         description.appendText("Repeating Trigger Matcher");
-    }
-
-    @Override
-    public boolean isTriggered() {
-        Date now = new GregorianCalendar().getTime();
-        return (triggerTime.compareTo(now) < 0);
     }
 }

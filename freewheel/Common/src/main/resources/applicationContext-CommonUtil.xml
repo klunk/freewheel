@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (c) 2013 SixRQ Ltd.
+  ~
+  ~     Licensed under the Apache License, Version 2.0 (the "License");
+  ~     you may not use this file except in compliance with the License.
+  ~     You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~     Unless required by applicable law or agreed to in writing, software
+  ~     distributed under the License is distributed on an "AS IS" BASIS,
+  ~     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~     See the License for the specific language governing permissions and
+  ~     limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+    <!-- application props -->
+    <bean id="propertyPlaceholderConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:commonutil.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="freewheelDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${hibernate.driverclass}" />
+        <property name="url" value="${hibernate.url}" />
+        <property name="username" value="${hibernate.user}" />
+        <property name="password" value="${hibernate.password}" />
+    </bean>
+
+    <bean id="freewheelSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="freewheelDataSource"/>
+        <property name="annotatedClasses">
+            <list>
+                <value>org.freewheelschedule.freewheel.common.model.Job</value>
+                <value>org.freewheelschedule.freewheel.common.model.CommandJob</value>
+                <value>org.freewheelschedule.freewheel.common.model.Trigger</value>
+                <value>org.freewheelschedule.freewheel.common.model.TimedTrigger</value>
+                <value>org.freewheelschedule.freewheel.common.model.RepeatingTrigger</value>
+                <value>org.freewheelschedule.freewheel.common.model.Machine</value>
+                <value>org.freewheelschedule.freewheel.common.model.Execution</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.show_sql">${hibernate.showsql}</prop>
+                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl}</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="jobDao" class ="org.freewheelschedule.freewheel.common.dao.JobDao">
+        <property name="sessionFactory" ref="freewheelSessionFactory" />
+    </bean>
+    <bean id="machineDao" class ="org.freewheelschedule.freewheel.common.dao.MachineDao">
+        <property name="sessionFactory" ref="freewheelSessionFactory" />
+    </bean>
+    <bean id="triggerDao" class ="org.freewheelschedule.freewheel.common.dao.TriggerDao">
+        <property name="sessionFactory" ref="freewheelSessionFactory" />
+    </bean>
+    <bean id="executionDao" class ="org.freewheelschedule.freewheel.common.dao.ExecutionDao">
+        <property name="sessionFactory" ref="freewheelSessionFactory" />
+    </bean>
+</beans>
