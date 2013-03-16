@@ -25,6 +25,7 @@ import org.freewheelschedule.freewheel.common.dao.TriggerDao;
 import org.freewheelschedule.freewheel.common.message.JobResponseMessage;
 import org.freewheelschedule.freewheel.common.model.*;
 import org.freewheelschedule.freewheel.common.network.FreewheelSocket;
+import org.joda.time.LocalTime;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -101,7 +102,7 @@ public class AcknowledgementListenerThread extends FreewheelAbstractRunnable {
     private void setNextTrigger(JobResponseMessage responseMessage) {
         Trigger trigger = triggerDao.readByJobId(responseMessage.getUid());
         if (trigger instanceof RepeatingTrigger) {
-            Date triggerTime = new Date(new GregorianCalendar().getTimeInMillis() + ((RepeatingTrigger) trigger).getTriggerInterval());
+            LocalTime triggerTime = new LocalTime().plusMillis(((RepeatingTrigger) trigger).getTriggerInterval().intValue());
             ((RepeatingTrigger) trigger).setTriggerTime(triggerTime);
             try {
                 triggerQueue.put(trigger);

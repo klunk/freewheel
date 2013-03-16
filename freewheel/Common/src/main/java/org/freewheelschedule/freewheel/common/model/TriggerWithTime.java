@@ -18,26 +18,24 @@ package org.freewheelschedule.freewheel.common.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import org.joda.time.LocalTime;
 
 @Entity
 public abstract class TriggerWithTime<T> extends Trigger<T> {
     @Column
-    Date triggerTime;
+    LocalTime triggerTime;
 
-    public Date getTriggerTime() {
+    public LocalTime getTriggerTime() {
         return triggerTime;
     }
 
-    public void setTriggerTime(Date triggerTime) {
+    public void setTriggerTime(LocalTime triggerTime) {
         this.triggerTime = triggerTime;
     }
 
     @Override
     public boolean isTriggered() {
-        Date now = new GregorianCalendar().getTime();
-        return (triggerTime.compareTo(now) < 0);
+        return (triggerTime.compareTo(new LocalTime()) < 0);
     }
 
     @Override

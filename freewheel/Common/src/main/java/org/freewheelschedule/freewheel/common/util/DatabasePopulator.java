@@ -23,6 +23,7 @@ import org.freewheelschedule.freewheel.common.dao.JobDao;
 import org.freewheelschedule.freewheel.common.dao.MachineDao;
 import org.freewheelschedule.freewheel.common.dao.TriggerDao;
 import org.freewheelschedule.freewheel.common.model.*;
+import org.joda.time.LocalTime;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,9 +72,9 @@ public class DatabasePopulator {
         triggerDao.create(trigger);
 
         TimedTrigger timedTrigger = new TimedTrigger();
-        Date triggerDate = new Date();
-        triggerDate.setTime(triggerDate.getTime() + 6000);
-        timedTrigger.setTriggerTime(triggerDate);
+        LocalTime triggerTime = new LocalTime();
+        triggerTime.plusMillis(6000);
+        timedTrigger.setTriggerTime(triggerTime);
         triggerDao.create(timedTrigger);
 
         List<Trigger> timedTriggers = new ArrayList<Trigger>();

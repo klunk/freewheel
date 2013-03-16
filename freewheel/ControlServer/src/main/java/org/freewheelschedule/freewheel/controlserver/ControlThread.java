@@ -25,6 +25,7 @@ import org.freewheelschedule.freewheel.common.model.CommandJob;
 import org.freewheelschedule.freewheel.common.model.Job;
 import org.freewheelschedule.freewheel.common.model.RepeatingTrigger;
 import org.freewheelschedule.freewheel.common.model.Trigger;
+import org.joda.time.LocalTime;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
@@ -131,7 +132,7 @@ public class ControlThread extends FreewheelAbstractRunnable {
         for (Trigger trigger : triggers) {
             try {
                 if (trigger instanceof RepeatingTrigger) {
-                    Date triggerTime = new Date(new GregorianCalendar().getTimeInMillis() + ((RepeatingTrigger) trigger).getTriggerInterval());
+                    LocalTime triggerTime = new LocalTime().plusMillis(((RepeatingTrigger) trigger).getTriggerInterval().intValue());
                     ((RepeatingTrigger) trigger).setTriggerTime(triggerTime);
                 }
                 triggerQueue.put(trigger);
