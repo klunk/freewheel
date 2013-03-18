@@ -17,6 +17,7 @@
 package org.freewheelschedule.freewheel.common.model;
 
 import org.hamcrest.Description;
+import org.joda.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -27,6 +28,17 @@ import java.util.GregorianCalendar;
 @Entity
 @DiscriminatorValue("TIMED")
 public class TimedTrigger extends TriggerWithTime<TimedTrigger>  {
+    @Column
+    int daysOfWeek;
+
+    public void setDaysOfWeek(int daysOfWeek) {
+        this.daysOfWeek = daysOfWeek;
+    }
+
+    public int getDaysOfWeek() {
+        return daysOfWeek;
+    }
+
     @Override
     public boolean matchesSafely(TimedTrigger trigger) {
         return this.triggerTime.equals(trigger.getTriggerTime());
@@ -35,5 +47,11 @@ public class TimedTrigger extends TriggerWithTime<TimedTrigger>  {
     @Override
     public void describeTo(Description description) {
         description.appendText("Timed Trigger Matcher");
+    }
+
+    @Override
+    public boolean isTriggered() {
+        DayOfWeek today = DayOfWeek.valueOf((new LocalDate()).dayOfWeek().getAsText().toUpperCase());
+        return today.matches(daysOfWeek) && super.isTriggered();
     }
 }

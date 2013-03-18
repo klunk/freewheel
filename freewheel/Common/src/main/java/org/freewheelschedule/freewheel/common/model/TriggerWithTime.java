@@ -35,7 +35,7 @@ public abstract class TriggerWithTime<T> extends Trigger<T> {
 
     @Override
     public boolean isTriggered() {
-        return (triggerTime.compareTo(new LocalTime()) < 0);
+        return (triggerTime.compareTo(new LocalTime()) <= 0);
     }
 
     @Override

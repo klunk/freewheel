@@ -34,6 +34,10 @@ public enum DayOfWeek {
         this.dayValue = dayValue;
     }
 
+    public int getDayValue() {
+        return dayValue;
+    }
+
     public boolean matches(int value) {
         return (dayValue & value) == dayValue;
     }
