@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package org.freewheelschedule.freewheel.common.model;
+package org.freewheelschedule.freewheel.common.util;
 
 import java.util.ArrayList;
 import java.util.List;

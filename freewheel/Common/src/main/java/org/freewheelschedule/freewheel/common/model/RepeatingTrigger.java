@@ -17,6 +17,7 @@
 package org.freewheelschedule.freewheel.common.model;
 
 import org.hamcrest.Description;
+import org.joda.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -46,5 +47,12 @@ public class RepeatingTrigger extends TriggerWithTime<RepeatingTrigger>  {
     @Override
     public void describeTo(Description description) {
         description.appendText("Repeating Trigger Matcher");
+    }
+
+    @Override
+    public boolean resetTrigger() {
+        LocalTime triggerTime = new LocalTime().plusMillis(getTriggerInterval().intValue());
+        setTriggerTime(triggerTime);
+        return true;
     }
 }

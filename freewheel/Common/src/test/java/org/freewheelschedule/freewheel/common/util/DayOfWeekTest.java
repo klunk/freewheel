@@ -14,9 +14,9 @@
  *     limitations under the License.
  */
 
-package org.freewheelschedule.freewheel.common.model;
+package org.freewheelschedule.freewheel.common.util;
 
-import static org.freewheelschedule.freewheel.common.model.DayOfWeek.*;
+import static org.freewheelschedule.freewheel.common.util.DayOfWeek.*;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;

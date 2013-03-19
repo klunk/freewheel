@@ -21,17 +21,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.freewheelschedule.freewheel.common.dao.ExecutionDao;
 import org.freewheelschedule.freewheel.common.dao.JobDao;
-import org.freewheelschedule.freewheel.common.dao.TriggerDao;
 import org.freewheelschedule.freewheel.common.message.JobResponseMessage;
 import org.freewheelschedule.freewheel.common.model.*;
 import org.freewheelschedule.freewheel.common.network.FreewheelSocket;
-import org.joda.time.LocalTime;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.concurrent.BlockingQueue;
 
 import static org.freewheelschedule.freewheel.common.message.Conversation.ACKNOWLEDGEMENT;
 import static org.freewheelschedule.freewheel.common.message.Conversation.HELO;
@@ -101,9 +97,7 @@ public class AcknowledgementListenerThread extends FreewheelAbstractRunnable {
 
     private void setNextTrigger(JobResponseMessage responseMessage) {
         Trigger trigger = triggerDao.readByJobId(responseMessage.getUid());
-        if (trigger instanceof RepeatingTrigger) {
-            LocalTime triggerTime = new LocalTime().plusMillis(((RepeatingTrigger) trigger).getTriggerInterval().intValue());
-            ((RepeatingTrigger) trigger).setTriggerTime(triggerTime);
+        if (trigger.resetTrigger()) {
             try {
                 triggerQueue.put(trigger);
             } catch (InterruptedException e) {

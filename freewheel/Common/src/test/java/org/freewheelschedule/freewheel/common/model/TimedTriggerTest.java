@@ -16,6 +16,7 @@
 
 package org.freewheelschedule.freewheel.common.model;
 
+import org.freewheelschedule.freewheel.common.util.DayOfWeek;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.junit.Before;
@@ -31,14 +32,36 @@ public class TimedTriggerTest {
 
     @Test
     public void testIsCorrectlyTriggered() throws Exception {
-        triggerUnderTest.setTriggerTime(new LocalTime());
+        triggerUnderTest.setTriggerTime(new LocalTime().plusMillis(100));
+        triggerUnderTest.resetTrigger();
+        Thread.sleep(100);
         assertThat(triggerUnderTest.isTriggered(), is(equalTo(true)));
     }
 
     @Test
     public void testFutureTimeIsNotTriggered() throws Exception {
         triggerUnderTest.setTriggerTime((new LocalTime()).plusMinutes(5));
+        triggerUnderTest.resetTrigger();
         assertThat(triggerUnderTest.isTriggered(), is(equalTo(false)));
+    }
+
+    @Test
+    public void runDateIsCorrectlyResetAfterTriggerFired() throws Exception {
+        triggerUnderTest.setDaysOfWeek(127);
+        triggerUnderTest.setTriggerTime(new LocalTime());
+        Thread.sleep(1);
+        triggerUnderTest.resetTrigger();
+        LocalDate expectedDate = (new LocalDate()).plusDays(1);
+        assertThat(triggerUnderTest.getRunDate(), is(equalTo(expectedDate)));
+    }
+
+    @Test
+    public void runDateIsCorrectlySetBeforeTriggerFired() throws Exception {
+        triggerUnderTest.setDaysOfWeek(127);
+        triggerUnderTest.setTriggerTime((new LocalTime()).plusMillis(1));
+        triggerUnderTest.resetTrigger();
+        LocalDate expectedDate = (new LocalDate());
+        assertThat(triggerUnderTest.getRunDate(), is(equalTo(expectedDate)));
     }
 
     @Before

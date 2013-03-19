@@ -50,4 +50,7 @@ public abstract class Trigger<T> extends TypeSafeMatcher<T> implements Comparabl
 
     @Transient
     public abstract boolean isTriggered();
+
+    @Transient
+    public abstract boolean resetTrigger();
 }

@@ -16,20 +16,23 @@
 
 package org.freewheelschedule.freewheel.common.model;
 
+import org.freewheelschedule.freewheel.common.util.DayOfWeek;
 import org.hamcrest.Description;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import javax.persistence.Transient;
 
 @Entity
 @DiscriminatorValue("TIMED")
 public class TimedTrigger extends TriggerWithTime<TimedTrigger>  {
     @Column
     int daysOfWeek;
+    @Transient
+    private LocalDate runDate;
 
     public void setDaysOfWeek(int daysOfWeek) {
         this.daysOfWeek = daysOfWeek;
@@ -41,7 +44,7 @@ public class TimedTrigger extends TriggerWithTime<TimedTrigger>  {
 
     @Override
     public boolean matchesSafely(TimedTrigger trigger) {
-        return this.triggerTime.equals(trigger.getTriggerTime());
+        return this.triggerTime.equals(trigger.getTriggerTime()) && this.runDate.equals(new LocalDate());
     }
 
     @Override
@@ -51,7 +54,32 @@ public class TimedTrigger extends TriggerWithTime<TimedTrigger>  {
 
     @Override
     public boolean isTriggered() {
-        DayOfWeek today = DayOfWeek.valueOf((new LocalDate()).dayOfWeek().getAsText().toUpperCase());
-        return today.matches(daysOfWeek) && super.isTriggered();
+        return runDate.equals(new LocalDate()) && super.isTriggered();
+    }
+
+    @Override
+    public boolean resetTrigger() {
+        if (getTriggerTime().isBefore(new LocalTime())) {
+            setNextRunDay();
+        } else {
+            runDate = new LocalDate();
+        }
+        return true;
+    }
+
+    private void setNextRunDay() {
+        LocalDate nextCandidate = new LocalDate();
+        LocalDate nextRunDay = null;
+        while(nextRunDay == null) {
+            nextCandidate = nextCandidate.plusDays(1);
+            if (DayOfWeek.valueOf(nextCandidate.dayOfWeek().getAsText().toUpperCase()).matches(daysOfWeek)) {
+                nextRunDay = nextCandidate;
+            }
+        }
+        runDate = nextRunDay;
+    }
+
+    public LocalDate getRunDate() {
+        return runDate;
     }
 }
