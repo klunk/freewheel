@@ -75,6 +75,7 @@ public class DatabasePopulator {
         LocalTime triggerTime = new LocalTime();
         triggerTime.plusMillis(6000);
         timedTrigger.setTriggerTime(triggerTime);
+        timedTrigger.setDaysOfWeek(127);
         triggerDao.create(timedTrigger);
 
         List<Trigger> timedTriggers = new ArrayList<Trigger>();

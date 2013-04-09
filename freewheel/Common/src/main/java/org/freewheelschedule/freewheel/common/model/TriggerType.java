@@ -17,19 +17,26 @@
 package org.freewheelschedule.freewheel.common.model;
 
 public enum TriggerType {
-    BASIC("BASIC"),
-    TIMED("TIMED"),
-    SUCCESS("SUCCESS"),
-    FAILURE("FAILURE"),
-    RESOURCE("RESOURCE");
+    BASIC("BASIC",1),
+    REPEATING("REPEATING",2),
+    TIMED("TIMED",3),
+    SUCCESS("SUCCESS",4),
+    FAILURE("FAILURE",5),
+    RESOURCE("RESOURCE",6);
 
     private final String value;
+    private final int order;
+
+    TriggerType(String value, int order) {
+        this.value = value;
+        this.order = order;
+    }
 
     public String getValue() {
         return value;
     }
 
-    TriggerType(String value) {
-        this.value = value;
+    public int getOrder() {
+        return order;
     }
 }

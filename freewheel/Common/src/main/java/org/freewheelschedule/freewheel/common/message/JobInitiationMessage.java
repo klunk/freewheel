@@ -124,4 +124,12 @@ public class JobInitiationMessage {
         result = 31 * result + (serverPort != null ? serverPort.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "JobInitiationMessage{" +
+                "uid=" + uid +
+                ", jobType=" + jobType +
+                '}';
+    }
 }

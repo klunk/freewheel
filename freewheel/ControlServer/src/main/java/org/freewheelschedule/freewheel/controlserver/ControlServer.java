@@ -26,6 +26,7 @@ import org.freewheelschedule.freewheel.common.model.CommandJob;
 import org.freewheelschedule.freewheel.common.model.Job;
 import org.freewheelschedule.freewheel.common.model.RepeatingTrigger;
 import org.freewheelschedule.freewheel.common.model.Trigger;
+import org.freewheelschedule.freewheel.common.util.QueueWrapper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,10 +57,16 @@ public class ControlServer {
 
     private Runnable controller;
 
-    private BlockingQueue<Trigger> triggerQueue = new PriorityBlockingQueue<Trigger>();
+    private QueueWrapper triggerQueue;
     private Thread listenerThread;
     private Long timeout = 500L;
     private Thread controllerThread;
+
+    public ControlServer(Runnable listener, Runnable controller, QueueWrapper triggerQueue) {
+        this.listener = listener;
+        this.controller = controller;
+        this.triggerQueue = triggerQueue;
+    }
 
     public void runControlServer() {
 
@@ -84,7 +91,7 @@ public class ControlServer {
         log.info("Initializing jobs");
         ((ControlThread)controller).initializeJobs();
 
-        log.info("Strating threads");
+        log.info("Starting threads");
         listenerThread.start();
         controllerThread.start();
         try {

@@ -28,7 +28,7 @@ import javax.persistence.Transient;
 
 @Entity
 @DiscriminatorValue("TIMED")
-public class TimedTrigger extends TriggerWithTime<TimedTrigger>  {
+public class TimedTrigger extends TriggerWithTime<TimedTrigger> implements Comparable<TimedTrigger> {
     @Column
     int daysOfWeek;
     @Transient
@@ -42,8 +42,13 @@ public class TimedTrigger extends TriggerWithTime<TimedTrigger>  {
         return daysOfWeek;
     }
 
+    public TimedTrigger() {
+        super.setType(TriggerType.TIMED);
+    }
+
     @Override
     public boolean matchesSafely(TimedTrigger trigger) {
+
         return this.triggerTime.equals(trigger.getTriggerTime()) && this.runDate.equals(new LocalDate());
     }
 
@@ -81,5 +86,10 @@ public class TimedTrigger extends TriggerWithTime<TimedTrigger>  {
 
     public LocalDate getRunDate() {
         return runDate;
+    }
+
+    @Override
+    public int compareTo(TimedTrigger that) {
+        return this.getRunDate().compareTo(that.getRunDate());
     }
 }

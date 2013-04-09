@@ -60,9 +60,9 @@ public class ControlThread extends FreewheelAbstractRunnable {
         do {
             try {
                 try {
-                    Trigger firedTrigger = triggerQueue.peek();
+                    Trigger firedTrigger = triggerQueue.getNextTrigger();        // Get next fired trigger from queue and run the job.
                     Job jobToRun = null;
-                    if (firedTrigger != null && firedTrigger.isTriggered()) {
+                    if (firedTrigger != null) {
                         jobToRun = firedTrigger.getJob();
                         if (jobToRun != null) {
                             runJob(hostname, jobToRun);
@@ -130,16 +130,13 @@ public class ControlThread extends FreewheelAbstractRunnable {
     protected void initializeJobs() {
         List<Trigger> triggers = triggerDao.read();
         for (Trigger trigger : triggers) {
-            try {
-                if (trigger instanceof RepeatingTrigger) {
-                    LocalTime triggerTime = new LocalTime().plusMillis(((RepeatingTrigger) trigger).getTriggerInterval().intValue());
-                    ((RepeatingTrigger) trigger).setTriggerTime(triggerTime);
+            if (trigger.resetTrigger()) {
+                try {
+                    triggerQueue.put(trigger);
+                } catch (InterruptedException e) {
+                    log.error("Failed to read Trigger details from the database", e);
                 }
-                triggerQueue.put(trigger);
-            } catch (InterruptedException e) {
-                log.error("Failed to read Trigger details from the database", e);
             }
         }
     }
-
 }

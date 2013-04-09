@@ -31,6 +31,10 @@ public class RepeatingTrigger extends TriggerWithTime<RepeatingTrigger>  {
     @Column
     Long triggerInterval;
 
+    public RepeatingTrigger() {
+        super.setType(TriggerType.REPEATING);
+    }
+
     public Long getTriggerInterval() {
         return triggerInterval;
     }
@@ -54,5 +58,10 @@ public class RepeatingTrigger extends TriggerWithTime<RepeatingTrigger>  {
         LocalTime triggerTime = new LocalTime().plusMillis(getTriggerInterval().intValue());
         setTriggerTime(triggerTime);
         return true;
+    }
+
+    @Override
+    public int compareTo(RepeatingTrigger that) {
+        return this.getTriggerTime().compareTo(that.getTriggerTime());
     }
 }

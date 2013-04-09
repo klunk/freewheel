@@ -101,7 +101,7 @@ public class AcknowledgementListenerThread extends FreewheelAbstractRunnable {
             try {
                 triggerQueue.put(trigger);
             } catch (InterruptedException e) {
-                log.error("Interrupted adding trigger to Queue", e);
+                log.error("Failed to read Trigger details from the database", e);
             }
         }
     }

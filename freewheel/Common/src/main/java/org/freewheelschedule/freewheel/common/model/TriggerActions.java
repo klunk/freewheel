@@ -16,26 +16,9 @@
 
 package org.freewheelschedule.freewheel.common.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import org.joda.time.LocalTime;
+import javax.persistence.Transient;
 
-@Entity
-public abstract class TriggerWithTime<T> extends Trigger<T> {
-    @Column
-    LocalTime triggerTime;
-
-    public LocalTime getTriggerTime() {
-        return triggerTime;
-    }
-
-    public void setTriggerTime(LocalTime triggerTime) {
-        this.triggerTime = triggerTime;
-    }
-
-    @Override
-    public boolean isTriggered() {
-        return !triggerTime.isAfter(new LocalTime());
-    }
-
+public interface TriggerActions {
+    boolean isTriggered();
+    boolean resetTrigger();
 }

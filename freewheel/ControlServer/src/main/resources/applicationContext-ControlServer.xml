@@ -31,8 +31,9 @@
     </bean>
 
     <bean name="controlServer" class="org.freewheelschedule.freewheel.controlserver.ControlServer">
-        <property name="listener" ref="listener"/>
-        <property name="controller" ref="controller"/>
+        <constructor-arg index="0" ref="listener"/>
+        <constructor-arg index="1" ref="controller"/>
+        <constructor-arg index="2" ref="BlockingQueueWrapper" />
     </bean>
 
     <!-- The thread that listens for inbound status messages -->
@@ -47,6 +48,18 @@
     <bean name="controller" class="org.freewheelschedule.freewheel.controlserver.ControlThread">
         <property name="triggerDao" ref="triggerDao"/>
     </bean>
+
+    <bean name="BlockingQueueWrapper" class="org.freewheelschedule.freewheel.common.util.QueueWrapper">
+        <property name="queueMap">
+            <map>
+                <entry key="REPEATING" value-ref="repeatingQueue"/>
+                <entry key="TIMED" value-ref="timedQueue"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean name="repeatingQueue" class="java.util.concurrent.PriorityBlockingQueue"/>
+    <bean name="timedQueue" class="java.util.concurrent.PriorityBlockingQueue"/>
 
     <!-- This bean controls the inbound connection from the central server that triggers jobs -->
     <bean name="serverConnection" class="org.freewheelschedule.freewheel.common.network.FreewheelClientSocket">

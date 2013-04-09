@@ -18,20 +18,21 @@ package org.freewheelschedule.freewheel.controlserver;
 
 import org.freewheelschedule.freewheel.common.dao.TriggerDao;
 import org.freewheelschedule.freewheel.common.model.Trigger;
+import org.freewheelschedule.freewheel.common.util.QueueWrapper;
 
 import java.util.concurrent.BlockingQueue;
 
 public abstract class FreewheelAbstractRunnable implements Runnable {
 
     protected boolean continueWaiting = true;
-    protected BlockingQueue<Trigger> triggerQueue;
+    protected QueueWrapper triggerQueue;
     protected TriggerDao triggerDao;
 
     public void setContinueWaiting(boolean continueWaiting) {
         this.continueWaiting = continueWaiting;
     }
 
-    public void setTriggerQueue(BlockingQueue<Trigger> triggerQueue) {
+    public void setTriggerQueue(QueueWrapper triggerQueue) {
         this.triggerQueue = triggerQueue;
     }
 

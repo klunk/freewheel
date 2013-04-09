@@ -16,21 +16,23 @@
 
 package org.freewheelschedule.freewheel.common.model;
 
-import org.hamcrest.TypeSafeMatcher;
 
+import org.hamcrest.TypeSafeMatcher;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "TRIGGER")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TriggerType", discriminatorType = DiscriminatorType.STRING)
-public abstract class Trigger<T> extends TypeSafeMatcher<T> implements Comparable<Trigger> {
+public abstract class Trigger<T> extends TypeSafeMatcher<T> implements Comparable<T>, TriggerActions {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long uid;
     @OneToOne(fetch=FetchType.EAGER)
     Job job;
+    @Column
+    TriggerType type;
 
     public Long getUid() {
         return uid;
@@ -48,9 +50,17 @@ public abstract class Trigger<T> extends TypeSafeMatcher<T> implements Comparabl
         this.job = job;
     }
 
-    @Transient
-    public abstract boolean isTriggered();
+    public TriggerType getType() {
+        return type;
+    }
 
-    @Transient
-    public abstract boolean resetTrigger();
+    public void setType(TriggerType type) {
+        this.type = type;
+    }
+
+    public int compareTo(Trigger that) {
+        return (this.getType().getOrder() == that.getType().getOrder()) ?
+                this.getUid().compareTo(that.getUid()) :
+                ((Integer)this.getType().getOrder()).compareTo(that.getType().getOrder());
+    }
 }
