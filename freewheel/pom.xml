@@ -34,5 +34,6 @@
     <module>RemoteWorker</module>
     <module>ControlServer</module>
     <module>Common</module>
+    <module>Services</module>
   </modules>
 </project>
