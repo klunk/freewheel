@@ -58,15 +58,18 @@ public class RemoteWorker {
 
 		listenerThread.start();
 		runnerThread.start();
-		try {
-			listenerThread.join();
-		} catch (InterruptedException e) {
-			log.error("Join interrupted", e);
-		}
 
-		log.info("Freewheel RemoteWorker has stopped.");
+        log.info("Freewheel RemoteWorker has stopped.");
 
 	}
+
+    public void joinListenerThread() {
+        try {
+            listenerThread.join();
+        } catch (InterruptedException e) {
+            log.error("Join interrupted", e);
+        }
+    }
 
     public void setListener(Runnable listener) {
         this.listener = listener;
@@ -85,6 +88,7 @@ public class RemoteWorker {
 		
 		RemoteWorker worker = (RemoteWorker)ctx.getBean("remoteWorker");
 		worker.runRemoteWorker();
+        worker.joinListenerThread();
 	}
 
 }

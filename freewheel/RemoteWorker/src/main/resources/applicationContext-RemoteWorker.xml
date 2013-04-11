@@ -33,8 +33,8 @@
 
     <!-- The main controlling class for the Remote worker -->
     <bean name="remoteWorker" class="org.freewheelschedule.freewheel.remoteworker.RemoteWorker">
-        <property name="listener" ref="listener"/>
-        <property name="runner" ref="runner"/>
+        <property name="listener" ref="workerListener"/>
+        <property name="runner" ref="workerRunner"/>
     </bean>
 
     <!-- This bean controls the inbound connection from the central server that triggers jobs -->
@@ -45,7 +45,7 @@
     <!-- The actual inbound connection from the central server, uses a proxy over the standard Java ServerSocket -->
     <bean name="listenerSocket" class="org.freewheelschedule.freewheel.common.network.ServerSocketProxy">
         <constructor-arg index="0">
-            <value>${port}</value>
+            <value>${serverPort}</value>
         </constructor-arg>
         <constructor-arg index="1">
             <value>${socketTimeout}</value>
@@ -53,7 +53,7 @@
     </bean>
 
     <!-- The thread that will actually execute the jobs -->
-    <bean name="runner" class="org.freewheelschedule.freewheel.remoteworker.RunnerThread">
+    <bean name="workerRunner" class="org.freewheelschedule.freewheel.remoteworker.RunnerThread">
         <property name="jobQueue" ref="jobQueue"/>
         <constructor-arg index="0">
             <value>${numberOfWorkers}</value>
@@ -62,12 +62,12 @@
             <value>${queueTimeout}</value>
         </property>
         <property name="remotePort">
-            <value>${remotePort}</value>
+            <value>${runnerRemotePort}</value>
         </property>
     </bean>
 
     <!-- The thread that listens for inbound messages to perform operations -->
-    <bean name="listener" class="org.freewheelschedule.freewheel.remoteworker.ListenerThread">
+    <bean name="workerListener" class="org.freewheelschedule.freewheel.remoteworker.ListenerThread">
         <property name="inboundSocket" ref="serverConnection"/>
         <property name="jobQueue" ref="jobQueue"/>
     </bean>

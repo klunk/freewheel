@@ -31,13 +31,13 @@
     </bean>
 
     <bean name="controlServer" class="org.freewheelschedule.freewheel.controlserver.ControlServer">
-        <constructor-arg index="0" ref="listener"/>
-        <constructor-arg index="1" ref="controller"/>
+        <constructor-arg index="0" ref="serverListener"/>
+        <constructor-arg index="1" ref="serverController"/>
         <constructor-arg index="2" ref="BlockingQueueWrapper" />
     </bean>
 
     <!-- The thread that listens for inbound status messages -->
-    <bean name="listener" class="org.freewheelschedule.freewheel.controlserver.AcknowledgementListenerThread">
+    <bean name="serverListener" class="org.freewheelschedule.freewheel.controlserver.AcknowledgementListenerThread">
         <property name="inboundSocket" ref="serverConnection"/>
         <property name="triggerDao" ref="triggerDao"/>
         <property name="jobDao" ref="jobDao"/>
@@ -45,7 +45,7 @@
     </bean>
 
     <!-- The thread that listens for inbound status messages -->
-    <bean name="controller" class="org.freewheelschedule.freewheel.controlserver.ControlThread">
+    <bean name="serverController" class="org.freewheelschedule.freewheel.controlserver.ControlThread">
         <property name="triggerDao" ref="triggerDao"/>
     </bean>
 
@@ -69,7 +69,7 @@
     <!-- The actual inbound connection from the central server, uses a proxy over the standard Java ServerSocket -->
     <bean name="listenerSocket" class="org.freewheelschedule.freewheel.common.network.ServerSocketProxy">
         <constructor-arg index="0">
-            <value>${port}</value>
+            <value>${workerPort}</value>
         </constructor-arg>
         <constructor-arg index="1">
             <value>${socketTimeout}</value>

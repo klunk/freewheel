@@ -94,6 +94,9 @@ public class ControlServer {
         log.info("Starting threads");
         listenerThread.start();
         controllerThread.start();
+    }
+
+    public void joinControlServer() {
         try {
             controllerThread.join();
         } catch (InterruptedException e) {
@@ -119,6 +122,6 @@ public class ControlServer {
 
         ControlServer server = (ControlServer) ctx.getBean("controlServer");
         server.runControlServer();
-
+        server.joinControlServer();
     }
 }
