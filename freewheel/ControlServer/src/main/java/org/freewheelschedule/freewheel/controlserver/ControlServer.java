@@ -104,14 +104,6 @@ public class ControlServer {
         }
     }
 
-    public void setController(Runnable controller) {
-        this.controller = controller;
-    }
-
-    public void setListener(Runnable listener) {
-        this.listener = listener;
-    }
-
     /**
      * main method to start the ControlServer process.
      *

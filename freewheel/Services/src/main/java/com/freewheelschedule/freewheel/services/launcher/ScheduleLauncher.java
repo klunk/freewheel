@@ -16,6 +16,7 @@
 
 package com.freewheelschedule.freewheel.services.launcher;
 
+import com.freewheelschedule.freewheel.services.rest.RestServices;
 import org.freewheelschedule.freewheel.controlserver.ControlServer;
 import org.freewheelschedule.freewheel.remoteworker.RemoteWorker;
 import org.springframework.context.ApplicationContext;
@@ -24,13 +25,16 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class ScheduleLauncher {
 
     private final ControlServer controlServer;
+    private final RestServices restService;
 
-    public ScheduleLauncher(ControlServer controlServer) {
+    public ScheduleLauncher(ControlServer controlServer, RestServices restService) {
         this.controlServer = controlServer;
+        this.restService = restService;
     }
 
     private void runScheduleLauncher() {
         controlServer.runControlServer();
+        restService.runRestService();
     }
 
     public static void main(String[] args) {

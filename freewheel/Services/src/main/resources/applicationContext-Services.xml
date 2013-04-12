@@ -32,5 +32,12 @@
 
     <bean name="scheduleLauncher" class="com.freewheelschedule.freewheel.services.launcher.ScheduleLauncher">
         <constructor-arg index="0" ref="controlServer"/>
+        <constructor-arg index="1" ref="restServices"/>
     </bean>
+
+    <bean name="restServices" class="com.freewheelschedule.freewheel.services.rest.RestServices">
+        <constructor-arg index="0" ref="webService"/>
+    </bean>
+
+    <bean name="webService" class="com.freewheelschedule.freewheel.services.rest.WebServiceRunner"></bean>
 </beans>
