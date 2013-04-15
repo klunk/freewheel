@@ -74,8 +74,18 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>3.2.2.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>3.2.2.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
-            <version>2.5.6.SEC01</version>
+            <version>3.2.2.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>checkstyle</groupId>
@@ -95,7 +105,7 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.14</version>
+            <version>1.2.17</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -132,10 +142,33 @@
             <artifactId>RemoteWorker</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <!-- Jersey + Spring -->
         <dependency>
-            <groupId>org.freewheelschedule.freewheel</groupId>
-            <artifactId>ControlServer</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>com.sun.jersey.contribs</groupId>
+            <artifactId>jersey-spring</artifactId>
+            <version>1.17</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-web</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-beans</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-context</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
     <repositories>

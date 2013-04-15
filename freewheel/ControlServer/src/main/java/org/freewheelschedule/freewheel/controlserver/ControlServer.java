@@ -103,17 +103,4 @@ public class ControlServer {
             log.error("ControlServer interrupted waiting for jobs", e);
         }
     }
-
-    /**
-     * main method to start the ControlServer process.
-     *
-     * @param args
-     */
-    public static void main(String[] args) {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-ControlServer.xml");
-
-        ControlServer server = (ControlServer) ctx.getBean("controlServer");
-        server.runControlServer();
-        server.joinControlServer();
-    }
 }

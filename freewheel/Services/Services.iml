@@ -20,12 +20,12 @@
     <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jpa:2.0.8" level="project" />
     <orderEntry type="library" name="Maven: aopalliance:aopalliance:1.0" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-beans:2.0.8" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-core:2.0.8" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-beans:3.2.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-core:3.2.2.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:2.0.8" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-dao:2.0.8" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:2.0.8" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-aop:2.5.6.SEC01" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-aop:2.5.6" level="project" />
     <orderEntry type="library" name="Maven: checkstyle:checkstyle:5.0" level="project" />
     <orderEntry type="library" name="Maven: antlr:antlr:2.7.6" level="project" />
     <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils-core:1.7.0" level="project" />
@@ -34,7 +34,7 @@
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:1.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.collections:google-collections:0.9" level="project" />
     <orderEntry type="library" name="Maven: commons-logging:commons-logging-adapters:1.1" level="project" />
-    <orderEntry type="library" name="Maven: log4j:log4j:1.2.14" level="project" />
+    <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:0.9.2" level="project" />
     <orderEntry type="library" name="Maven: com.sun.jersey:jersey-server:1.17" level="project" />
     <orderEntry type="library" name="Maven: asm:asm:3.1" level="project" />
@@ -77,7 +77,8 @@
     <orderEntry type="library" name="Maven: javassist:javassist:3.4.GA" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.2" level="project" />
     <orderEntry type="module" module-name="RemoteWorker" />
-    <orderEntry type="module" module-name="ControlServer" />
+    <orderEntry type="library" name="Maven: com.sun.jersey.contribs:jersey-spring:1.17" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.jersey:jersey-servlet:1.17" level="project" />
   </component>
 </module>
 

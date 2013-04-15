@@ -14,11 +14,10 @@
  *     limitations under the License.
  */
 
-package com.freewheelschedule.freewheel.services.launcher;
+package org.freewheelschedule.freewheel.launcher;
 
-import com.freewheelschedule.freewheel.services.rest.RestServices;
+import org.freewheelschedule.freewheel.rest.RestServices;
 import org.freewheelschedule.freewheel.controlserver.ControlServer;
-import org.freewheelschedule.freewheel.remoteworker.RemoteWorker;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -38,7 +37,7 @@ public class ScheduleLauncher {
     }
 
     public static void main(String[] args) {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-Services.xml");
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-ControlServer.xml");
 
         ScheduleLauncher server = (ScheduleLauncher) ctx.getBean("scheduleLauncher");
         server.runScheduleLauncher();

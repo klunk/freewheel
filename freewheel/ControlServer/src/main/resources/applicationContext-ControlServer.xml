@@ -116,4 +116,16 @@
     <bean id="executionDao" class ="org.freewheelschedule.freewheel.common.dao.ExecutionDao">
         <property name="sessionFactory" ref="freewheelSessionFactory" />
     </bean>
+
+    <bean name="scheduleLauncher" class="org.freewheelschedule.freewheel.launcher.ScheduleLauncher">
+        <constructor-arg index="0" ref="controlServer"/>
+        <constructor-arg index="1" ref="restServices"/>
+    </bean>
+
+    <bean name="restServices" class="org.freewheelschedule.freewheel.rest.RestServices">
+        <constructor-arg index="0" ref="webService"/>
+    </bean>
+
+    <bean name="webService" class="org.freewheelschedule.freewheel.rest.WebServiceRunner"></bean>
+
 </beans>

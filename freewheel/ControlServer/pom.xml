@@ -35,6 +35,12 @@
     <scm>
         <url>http://subversion.assembla.com/svn/freewheel</url>
     </scm>
+    <properties>
+        <jersey.version>1.17</jersey.version>
+        <spring.version>3.2.2.RELEASE</spring.version>
+        <spring.jpa.version>2.0.8</spring.jpa.version>
+        <spring.integration.version>2.2.3.RELEASE</spring.integration.version>
+    </properties>
     <build>
         <plugins>
             <plugin>
@@ -68,12 +74,37 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jpa</artifactId>
-            <version>2.0.8</version>
+            <version>${spring.jpa.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
-            <version>2.5.6.SEC01</version>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-core</artifactId>
+            <version>${spring.integration.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>checkstyle</groupId>
@@ -101,6 +132,11 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>org.freewheelschedule.freewheel</groupId>
+            <artifactId>Services</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derby</artifactId>
             <version>10.3.2.1</version>
@@ -111,39 +147,39 @@
             <version>1.2.2</version>
         </dependency>
         <dependency>
-          <groupId>org.hibernate</groupId>
-          <artifactId>hibernate-core</artifactId>
-          <version>3.3.2.GA</version>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>3.3.2.GA</version>
         </dependency>
         <dependency>
-          <groupId>org.hibernate</groupId>
-          <artifactId>hibernate-annotations</artifactId>
-          <version>3.4.0.GA</version>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-annotations</artifactId>
+            <version>3.4.0.GA</version>
         </dependency>
         <dependency>
-          <groupId>org.springframework</groupId>
-          <artifactId>spring-hibernate3</artifactId>
-          <version>2.0.8</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-hibernate3</artifactId>
+            <version>${spring.jpa.version}</version>
         </dependency>
- <!--       <dependency>
-          <groupId>javax.transaction</groupId>
-          <artifactId>jta</artifactId>
-          <version>1.1</version>
+        <!--       <dependency>
+                 <groupId>javax.transaction</groupId>
+                 <artifactId>jta</artifactId>
+                 <version>1.1</version>
+               </dependency>
+               <dependency>
+                 <groupId>org.hibernate</groupId>
+                 <artifactId>ejb3-persistence</artifactId>
+                 <version>1.0.2.GA</version>
+               </dependency> -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>3.4.0.GA</version>
         </dependency>
         <dependency>
-          <groupId>org.hibernate</groupId>
-          <artifactId>ejb3-persistence</artifactId>
-          <version>1.0.2.GA</version>
-        </dependency> --> 
-        <dependency>
-          <groupId>org.hibernate</groupId>
-          <artifactId>hibernate-entitymanager</artifactId>
-          <version>3.4.0.GA</version>
-        </dependency>
-        <dependency>
-          <groupId>dom4j</groupId>
-          <artifactId>dom4j</artifactId>
-          <version>1.6.1</version>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.6.1</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -154,6 +190,49 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-grizzly2</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-json</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <!-- Jersey + Spring -->
+        <dependency>
+            <groupId>com.sun.jersey.contribs</groupId>
+            <artifactId>jersey-spring</artifactId>
+            <version>${jersey.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-web</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-beans</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-context</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
     <repositories>

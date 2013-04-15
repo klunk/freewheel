@@ -1,4 +1,4 @@
-package com.freewheelschedule.freewheel.services.rest;
+package org.freewheelschedule.freewheel.rest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

@@ -14,7 +14,7 @@
  *     limitations under the License.
  */
 
-package com.freewheelschedule.freewheel.services.rest;
+package org.freewheelschedule.freewheel.rest;
 
 import com.sun.jersey.api.container.grizzly2.GrizzlyServerFactory;
 import com.sun.jersey.api.core.PackagesResourceConfig;
