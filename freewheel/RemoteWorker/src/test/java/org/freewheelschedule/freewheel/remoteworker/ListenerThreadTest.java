@@ -16,7 +16,7 @@
 
 package org.freewheelschedule.freewheel.remoteworker;
 
-import com.google.gson.Gson;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
 import org.freewheelschedule.freewheel.common.network.FreewheelSocket;
 import org.jmock.Expectations;
@@ -40,7 +40,7 @@ import static org.junit.Assert.*;
 @RunWith(JMock.class)
 public class ListenerThreadTest {
 
-    private Gson gson = new Gson();
+    private ObjectMapper mapper = new ObjectMapper();
 
     Mockery context = new JUnit4Mockery();
     FreewheelSocket inboundSocket;
@@ -96,7 +96,7 @@ public class ListenerThreadTest {
                 will(returnValue("HELO Dummy machine"));
                 oneOf(inboundSocket).writeSocket("Enter command to run\r\n");
                 oneOf(inboundSocket).readSocket();
-                will(returnValue(gson.toJson(jim)));
+                will(returnValue(mapper.writeValueAsString(jim)));
                 oneOf(inboundSocket).writeSocket("Job queued\r\n");
             }});
         } catch (IOException e) {

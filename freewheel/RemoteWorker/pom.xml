@@ -76,14 +76,19 @@
             <version>2.5.6.SEC01</version>
         </dependency>
         <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.9.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.12</version>
+        </dependency>
+        <dependency>
             <groupId>checkstyle</groupId>
             <artifactId>checkstyle</artifactId>
             <version>5.0</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging-adapters</artifactId>
-            <version>1.1</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>

@@ -16,16 +16,14 @@
 
 package org.freewheelschedule.freewheel.controlserver;
 
-import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
 import org.freewheelschedule.freewheel.common.message.JobType;
 import org.freewheelschedule.freewheel.common.model.CommandJob;
 import org.freewheelschedule.freewheel.common.model.Job;
-import org.freewheelschedule.freewheel.common.model.RepeatingTrigger;
 import org.freewheelschedule.freewheel.common.model.Trigger;
-import org.joda.time.LocalTime;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
@@ -36,8 +34,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import static org.freewheelschedule.freewheel.common.message.Conversation.*;
@@ -45,7 +41,7 @@ import static org.freewheelschedule.freewheel.common.message.Conversation.*;
 public class ControlThread extends FreewheelAbstractRunnable {
     private final static Log log = LogFactory.getLog(ControlThread.class);
 
-    private Gson gson = new Gson();
+    private ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public void run() {
@@ -109,8 +105,8 @@ public class ControlThread extends FreewheelAbstractRunnable {
         initiation.setAppendStderr(jobToRun.getAppendStderr());
         initiation.setStdout(jobToRun.getStdout());
         initiation.setAppendStdout(jobToRun.getAppendStderr());
-        log.debug(gson.toJson(initiation));
-        command.print(gson.toJson(initiation) + "\r\n");
+        log.debug(mapper.writeValueAsString(initiation));
+        command.print(mapper.writeValueAsString(initiation) + "\r\n");
         command.flush();
         return result.readLine().equals(CONFIRMATION);
     }

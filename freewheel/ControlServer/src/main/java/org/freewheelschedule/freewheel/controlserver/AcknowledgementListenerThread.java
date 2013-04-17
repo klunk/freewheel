@@ -16,14 +16,18 @@
 
 package org.freewheelschedule.freewheel.controlserver;
 
-import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.freewheelschedule.freewheel.common.dao.ExecutionDao;
 import org.freewheelschedule.freewheel.common.dao.JobDao;
 import org.freewheelschedule.freewheel.common.message.JobResponseMessage;
-import org.freewheelschedule.freewheel.common.model.*;
+import org.freewheelschedule.freewheel.common.model.Execution;
+import org.freewheelschedule.freewheel.common.model.Job;
+import org.freewheelschedule.freewheel.common.model.Status;
+import org.freewheelschedule.freewheel.common.model.Trigger;
 import org.freewheelschedule.freewheel.common.network.FreewheelSocket;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -35,16 +39,19 @@ import static org.freewheelschedule.freewheel.common.message.Conversation.HELO;
 public class AcknowledgementListenerThread extends FreewheelAbstractRunnable {
 
     private static Log log = LogFactory.getLog(AcknowledgementListenerThread.class);
+
+    @Autowired
     private FreewheelSocket inboundSocket;
 
+    @Autowired
     private JobDao jobDao;
-
+    @Autowired
     private ExecutionDao executionDao;
 
     @Override
     public void run() {
         String conversation;
-        Gson gson = new Gson();
+        ObjectMapper mapper = new ObjectMapper();
 
         log.info("Freewheel ControlServer listening on port " + inboundSocket.getPort() + " ...");
 
@@ -58,7 +65,7 @@ public class AcknowledgementListenerThread extends FreewheelAbstractRunnable {
                 conversation = inboundSocket.readSocket();
                 if (conversation.contains(HELO)) {
                     conversation = inboundSocket.readSocket();
-                    JobResponseMessage responseMessage = gson.fromJson(conversation, JobResponseMessage.class);
+                    JobResponseMessage responseMessage = mapper.readValue(conversation, JobResponseMessage.class);
                     log.debug("Json from client: " + conversation);
                     log.info("Message from client: " + responseMessage.getMessage());
                     inboundSocket.writeSocket(ACKNOWLEDGEMENT + "\r\n");

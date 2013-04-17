@@ -16,57 +16,26 @@
 
 package org.freewheelschedule.freewheel.controlserver;
 
-import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.freewheelschedule.freewheel.common.dao.TriggerDao;
-import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
-import org.freewheelschedule.freewheel.common.message.JobType;
-import org.freewheelschedule.freewheel.common.model.CommandJob;
-import org.freewheelschedule.freewheel.common.model.Job;
-import org.freewheelschedule.freewheel.common.model.RepeatingTrigger;
-import org.freewheelschedule.freewheel.common.model.Trigger;
 import org.freewheelschedule.freewheel.common.util.QueueWrapper;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
-
-import static org.freewheelschedule.freewheel.common.message.Conversation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 public class ControlServer {
 
     private final static Log log = LogFactory.getLog(ControlServer.class);
 
-    private Gson gson = new Gson();
-    private Runnable listener;
+    @Autowired
+    private QueueWrapper triggerQueue;
 
+    private Runnable listener;
     private Runnable controller;
 
-    private QueueWrapper triggerQueue;
-    private Thread listenerThread;
     private Long timeout = 500L;
-    private Thread controllerThread;
 
-    public ControlServer(Runnable listener, Runnable controller, QueueWrapper triggerQueue) {
-        this.listener = listener;
-        this.controller = controller;
-        this.triggerQueue = triggerQueue;
-    }
+    private Thread listenerThread;
+    private Thread controllerThread;
 
     public void runControlServer() {
 
@@ -102,5 +71,13 @@ public class ControlServer {
         } catch (InterruptedException e) {
             log.error("ControlServer interrupted waiting for jobs", e);
         }
+    }
+
+    public void setListener(Runnable listener) {
+        this.listener = listener;
+    }
+
+    public void setController(Runnable controller) {
+        this.controller = controller;
     }
 }

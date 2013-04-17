@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright (c) 2012 SixRQ Ltd.
+  ~ Copyright (c) 2013 SixRQ Ltd.
   ~
   ~     Licensed under the Apache License, Version 2.0 (the "License");
   ~     you may not use this file except in compliance with the License.
@@ -29,103 +29,5 @@
             </list>
         </property>
     </bean>
-
-    <bean name="controlServer" class="org.freewheelschedule.freewheel.controlserver.ControlServer">
-        <constructor-arg index="0" ref="serverListener"/>
-        <constructor-arg index="1" ref="serverController"/>
-        <constructor-arg index="2" ref="BlockingQueueWrapper" />
-    </bean>
-
-    <!-- The thread that listens for inbound status messages -->
-    <bean name="serverListener" class="org.freewheelschedule.freewheel.controlserver.AcknowledgementListenerThread">
-        <property name="inboundSocket" ref="serverConnection"/>
-        <property name="triggerDao" ref="triggerDao"/>
-        <property name="jobDao" ref="jobDao"/>
-        <property name="executionDao" ref="executionDao"/>
-    </bean>
-
-    <!-- The thread that listens for inbound status messages -->
-    <bean name="serverController" class="org.freewheelschedule.freewheel.controlserver.ControlThread">
-        <property name="triggerDao" ref="triggerDao"/>
-    </bean>
-
-    <bean name="BlockingQueueWrapper" class="org.freewheelschedule.freewheel.common.util.QueueWrapper">
-        <property name="queueMap">
-            <map>
-                <entry key="REPEATING" value-ref="repeatingQueue"/>
-                <entry key="TIMED" value-ref="timedQueue"/>
-            </map>
-        </property>
-    </bean>
-
-    <bean name="repeatingQueue" class="java.util.concurrent.PriorityBlockingQueue"/>
-    <bean name="timedQueue" class="java.util.concurrent.PriorityBlockingQueue"/>
-
-    <!-- This bean controls the inbound connection from the central server that triggers jobs -->
-    <bean name="serverConnection" class="org.freewheelschedule.freewheel.common.network.FreewheelClientSocket">
-        <property name="socket" ref="listenerSocket"/>
-    </bean>
-
-    <!-- The actual inbound connection from the central server, uses a proxy over the standard Java ServerSocket -->
-    <bean name="listenerSocket" class="org.freewheelschedule.freewheel.common.network.ServerSocketProxy">
-        <constructor-arg index="0">
-            <value>${workerPort}</value>
-        </constructor-arg>
-        <constructor-arg index="1">
-            <value>${socketTimeout}</value>
-        </constructor-arg>
-    </bean>
-
-    <bean id="freewheelDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="${hibernate.driverclass}" />
-        <property name="url" value="${hibernate.url}" />
-        <property name="username" value="${hibernate.user}" />
-        <property name="password" value="${hibernate.password}" />
-    </bean>
-
-    <bean id="freewheelSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-        <property name="dataSource" ref="freewheelDataSource"/>
-        <property name="annotatedClasses">
-            <list>
-                <value>org.freewheelschedule.freewheel.common.model.Job</value>
-                <value>org.freewheelschedule.freewheel.common.model.CommandJob</value>
-                <value>org.freewheelschedule.freewheel.common.model.Trigger</value>
-                <value>org.freewheelschedule.freewheel.common.model.TimedTrigger</value>
-                <value>org.freewheelschedule.freewheel.common.model.RepeatingTrigger</value>
-                <value>org.freewheelschedule.freewheel.common.model.Machine</value>
-                <value>org.freewheelschedule.freewheel.common.model.Execution</value>
-            </list>
-        </property>
-        <property name="hibernateProperties">
-            <props>
-                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
-                <prop key="hibernate.show_sql">${hibernate.showsql}</prop>
-<!--                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl}</prop> -->
-            </props>
-        </property>
-    </bean>
-    <bean id="jobDao" class ="org.freewheelschedule.freewheel.common.dao.JobDao">
-        <property name="sessionFactory" ref="freewheelSessionFactory" />
-    </bean>
-    <bean id="machineDao" class ="org.freewheelschedule.freewheel.common.dao.MachineDao">
-        <property name="sessionFactory" ref="freewheelSessionFactory" />
-    </bean>
-    <bean id="triggerDao" class ="org.freewheelschedule.freewheel.common.dao.TriggerDao">
-        <property name="sessionFactory" ref="freewheelSessionFactory" />
-    </bean>
-    <bean id="executionDao" class ="org.freewheelschedule.freewheel.common.dao.ExecutionDao">
-        <property name="sessionFactory" ref="freewheelSessionFactory" />
-    </bean>
-
-    <bean name="scheduleLauncher" class="org.freewheelschedule.freewheel.launcher.ScheduleLauncher">
-        <constructor-arg index="0" ref="controlServer"/>
-        <constructor-arg index="1" ref="restServices"/>
-    </bean>
-
-    <bean name="restServices" class="org.freewheelschedule.freewheel.rest.RestServices">
-        <constructor-arg index="0" ref="webService"/>
-    </bean>
-
-    <bean name="webService" class="org.freewheelschedule.freewheel.rest.WebServiceRunner"></bean>
 
 </beans>

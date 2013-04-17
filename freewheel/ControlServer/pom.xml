@@ -107,6 +107,11 @@
             <version>${spring.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
             <groupId>checkstyle</groupId>
             <artifactId>checkstyle</artifactId>
             <version>5.0</version>
@@ -199,6 +204,11 @@
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-grizzly2</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-grizzly2-servlet</artifactId>
             <version>${jersey.version}</version>
         </dependency>
         <dependency>

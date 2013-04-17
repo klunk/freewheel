@@ -16,20 +16,21 @@
 
 package org.freewheelschedule.freewheel.launcher;
 
+import org.freewheelschedule.freewheel.config.ServerConfig;
 import org.freewheelschedule.freewheel.rest.RestServices;
 import org.freewheelschedule.freewheel.controlserver.ControlServer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class ScheduleLauncher {
 
-    private final ControlServer controlServer;
-    private final RestServices restService;
+    @Autowired
+    private ControlServer controlServer;
+    @Autowired
+    private RestServices restService;
 
-    public ScheduleLauncher(ControlServer controlServer, RestServices restService) {
-        this.controlServer = controlServer;
-        this.restService = restService;
-    }
 
     private void runScheduleLauncher() {
         controlServer.runControlServer();
@@ -37,7 +38,7 @@ public class ScheduleLauncher {
     }
 
     public static void main(String[] args) {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext-ControlServer.xml");
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(ServerConfig.class);
 
         ScheduleLauncher server = (ScheduleLauncher) ctx.getBean("scheduleLauncher");
         server.runScheduleLauncher();

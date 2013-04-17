@@ -3,16 +3,17 @@ package org.freewheelschedule.freewheel.rest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.freewheelschedule.freewheel.controlserver.FreewheelAbstractRunnable;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class RestServices {
 
     private final static Log log = LogFactory.getLog(RestServices.class);
-    private Runnable webService;
-    private Thread webServiceThread;
 
-    public RestServices(WebServiceRunner webService) {
-        this.webService = webService;
-    }
+
+    @Autowired
+    private Runnable webService;
+
+    private Thread webServiceThread;
 
     public void runRestService() {
         log.info("Running REST Services ...");

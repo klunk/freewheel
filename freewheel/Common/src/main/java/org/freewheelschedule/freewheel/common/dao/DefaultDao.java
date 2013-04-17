@@ -21,6 +21,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class DefaultDao {
     final static Log log = LogFactory.getLog(DefaultDao.class);

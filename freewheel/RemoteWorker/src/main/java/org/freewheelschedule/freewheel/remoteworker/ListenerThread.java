@@ -16,9 +16,9 @@
 
 package org.freewheelschedule.freewheel.remoteworker;
 
-import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
 import org.freewheelschedule.freewheel.common.network.FreewheelSocket;
 import org.freewheelschedule.freewheel.common.network.Listener;
@@ -36,7 +36,7 @@ public class ListenerThread implements Listener, Runnable {
 	private BlockingQueue<JobInitiationMessage> jobQueue;
 	private FreewheelSocket inboundSocket;
 	private boolean continueWaiting = true;
-    private Gson gson = new Gson();
+    private ObjectMapper mapper = new ObjectMapper();
 
     public void run() {
 		
@@ -56,7 +56,7 @@ public class ListenerThread implements Listener, Runnable {
 					inboundSocket.writeSocket(COMMAND + "\r\n");
 					conversation = inboundSocket.readSocket();
 					log.info("Message from client: " + conversation);
-					JobInitiationMessage jobDetails = gson.fromJson(conversation, JobInitiationMessage.class);
+					JobInitiationMessage jobDetails = mapper.readValue(conversation, JobInitiationMessage.class);
 					jobQueue.put(jobDetails);
                     inboundSocket.writeSocket(CONFIRMATION + "\r\n");
 				} else {

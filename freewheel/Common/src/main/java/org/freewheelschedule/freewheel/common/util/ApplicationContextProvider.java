@@ -14,31 +14,21 @@
  *     limitations under the License.
  */
 
-package org.freewheelschedule.freewheel.common.model;
+package org.freewheelschedule.freewheel.common.util;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.joda.time.LocalTime;
+public class ApplicationContextProvider implements ApplicationContextAware {
+    private static ApplicationContext ctx;
 
-@Entity
-public abstract class TriggerWithTime<T> extends Trigger<T> {
-    @Column
-    LocalTime triggerTime;
-
-    public LocalTime getTriggerTime() {
-        return triggerTime;
-    }
-
-    public void setTriggerTime(LocalTime triggerTime) {
-        this.triggerTime = triggerTime;
+    public static ApplicationContext getApplicationContext() {
+        return ctx;
     }
 
     @Override
-    @JsonIgnore
-    public boolean isTriggered() {
-        return !triggerTime.isAfter(new LocalTime());
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        ctx = applicationContext;
     }
-
 }

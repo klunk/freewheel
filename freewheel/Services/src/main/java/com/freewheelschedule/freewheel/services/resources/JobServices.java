@@ -16,25 +16,28 @@
 
 package com.freewheelschedule.freewheel.services.resources;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.freewheelschedule.freewheel.common.dao.JobDao;
 import org.freewheelschedule.freewheel.common.model.Job;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import java.io.IOException;
 import java.util.List;
+
+import static org.freewheelschedule.freewheel.common.util.ApplicationContextProvider.getApplicationContext;
 
 @Path("/jobs")
 public class JobServices {
 
-    @Autowired
-    JobDao jobDao;
+    ObjectMapper mapper = new ObjectMapper();
 
     @GET
-    @Produces("text/plain")
-    public String getJobs() {
+    @Produces("application/json")
+    public String getJobs() throws IOException {
+        JobDao jobDao = (JobDao) getApplicationContext().getBean("jobDao");
         List<Job> jobs = jobDao.read();
-        return jobs.get(0).getName();
+        return mapper.writeValueAsString(jobs);
     }
 }

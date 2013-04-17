@@ -16,10 +16,13 @@
 
 package org.freewheelschedule.freewheel.common.network;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.io.IOException;
 
 public class FreewheelClientSocket implements FreewheelSocket {
 
+    @Autowired
 	private IServerSocketProxy socket;
 	private ISocketProxy server;
 	

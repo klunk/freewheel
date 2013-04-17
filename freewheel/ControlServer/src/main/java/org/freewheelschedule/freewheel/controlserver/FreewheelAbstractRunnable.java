@@ -19,13 +19,16 @@ package org.freewheelschedule.freewheel.controlserver;
 import org.freewheelschedule.freewheel.common.dao.TriggerDao;
 import org.freewheelschedule.freewheel.common.model.Trigger;
 import org.freewheelschedule.freewheel.common.util.QueueWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.concurrent.BlockingQueue;
 
 public abstract class FreewheelAbstractRunnable implements Runnable {
 
     protected boolean continueWaiting = true;
+    @Autowired
     protected QueueWrapper triggerQueue;
+    @Autowired
     protected TriggerDao triggerDao;
 
     public void setContinueWaiting(boolean continueWaiting) {

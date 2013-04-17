@@ -16,7 +16,6 @@
 
 package org.freewheelschedule.freewheel.common.util;
 
-import com.google.gson.Gson;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.freewheelschedule.freewheel.common.dao.JobDao;
@@ -35,8 +34,6 @@ import java.util.List;
 public class DatabasePopulator {
 
     private final static Log log = LogFactory.getLog(DatabasePopulator.class);
-
-    private static Gson gson = new Gson();
 
     @Transactional
     public static void main(String[] args) {
