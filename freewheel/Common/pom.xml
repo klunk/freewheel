@@ -37,6 +37,7 @@
     </scm>
     <properties>
         <jersey.version>1.17</jersey.version>
+        <jackson.version>1.9.12</jackson.version>
         <spring.version>3.2.2.RELEASE</spring.version>
         <spring.jpa.version>2.0.8</spring.jpa.version>
         <spring.integration.version>2.2.3.RELEASE</spring.integration.version>
@@ -95,7 +96,7 @@
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
-            <version>1.9.12</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
