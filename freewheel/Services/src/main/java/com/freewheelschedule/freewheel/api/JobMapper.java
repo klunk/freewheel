@@ -32,6 +32,8 @@ public class JobMapper implements JaxbMapper<Job, org.freewheelschedule.freewhee
         if (mapCollections) {
             TriggerListMapper triggerListMapper = new TriggerListMapper();
             job.setTriggers(triggerListMapper.map(source.getTriggers(), false));
+            ExecutionListMapper executionListMapper = new ExecutionListMapper();
+            job.setExecutions(executionListMapper.map(source.getExecutions(), false));
         }
         return job;
     }

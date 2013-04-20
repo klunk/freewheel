@@ -22,9 +22,7 @@ public class TriggerMapper implements JaxbMapper<Trigger, org.freewheelschedule.
     public Trigger map(org.freewheelschedule.freewheel.common.model.Trigger source, boolean mapCollections) {
         Trigger trigger = new Trigger();
         trigger.setUid(source.getUid());
-        TriggerType triggerType = new TriggerType();
-        triggerType.setTriggerType(source.getType().getValue());
-        trigger.setTriggerType(triggerType);
+        trigger.setTriggerType(source.getType().getValue());
         if (mapCollections) {
             JobMapper jobMapper = new JobMapper();
             trigger.setJob(jobMapper.map(source.getJob(), false));

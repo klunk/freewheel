@@ -19,13 +19,15 @@ package com.freewheelschedule.freewheel.services.resources;
 import com.freewheelschedule.freewheel.api.JobList;
 import com.freewheelschedule.freewheel.api.JobListMapper;
 import org.freewheelschedule.freewheel.common.dao.JobDao;
+import org.freewheelschedule.freewheel.common.model.Job;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.io.IOException;
+import java.util.List;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 import static org.freewheelschedule.freewheel.common.util.ApplicationContextProvider.getApplicationContext;
 
 @Path("/jobs")
@@ -34,9 +36,13 @@ public class JobServices {
     JobListMapper jobListMapper = new JobListMapper();
 
     @GET
-    @Produces(APPLICATION_JSON)
+    @Produces(APPLICATION_XML)
     public JobList getJobList() throws IOException {
         JobDao jobDao = (JobDao) getApplicationContext().getBean("jobDao");
-        return jobListMapper.map(jobDao.read(), true);
+        List<Job> jobList = jobDao.read();
+        for (Job job : jobList) {
+            jobDao.loadLazyCollections(job);
+        }
+        return jobListMapper.map(jobList, true);
     }
 }

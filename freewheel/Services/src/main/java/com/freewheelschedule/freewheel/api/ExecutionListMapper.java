@@ -16,6 +16,18 @@
 
 package com.freewheelschedule.freewheel.api;
 
-public interface JaxbMapper<T, X> {
-    public T map(X source, boolean mapCollections);
+import java.util.List;
+
+public class ExecutionListMapper implements JaxbMapper<ExecutionList, List<org.freewheelschedule.freewheel.common.model.Execution>> {
+
+    ExecutionMapper mapper= new ExecutionMapper();
+
+    @Override
+    public ExecutionList map(List<org.freewheelschedule.freewheel.common.model.Execution> source, boolean mapCollections) {
+        ExecutionList executionList = new ExecutionList();
+        for(org.freewheelschedule.freewheel.common.model.Execution execution : source) {
+            executionList.getExecution().add(mapper.map(execution, mapCollections));
+        }
+        return executionList;
+    }
 }

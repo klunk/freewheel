@@ -18,20 +18,26 @@
 
     <xs:complexType name="JobList">
         <xs:sequence>
-            <xs:element name="Job" type="Job" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="job" type="Job" maxOccurs="unbounded" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="TriggerList">
         <xs:sequence>
-            <xs:element name="Trigger" type="Trigger" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="trigger" type="Trigger" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ExecutionList">
+        <xs:sequence>
+            <xs:element name="execution" type="Execution" maxOccurs="unbounded" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="Job">
         <xs:sequence>
             <xs:element name="executingServer" type="Machine" minOccurs="0"/>
-            <xs:element name="executions" type="Execution"  minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="executions" type="ExecutionList"  minOccurs="0"/>
             <xs:element name="triggers" type="TriggerList"  minOccurs="0"/>
         </xs:sequence>
         <xs:attribute name="uid" type="xs:long"/>
@@ -52,11 +58,9 @@
     </xs:complexType>
 
     <xs:complexType name="Execution">
-        <xs:sequence>
-            <xs:element name="status" type="Status"/>
-        </xs:sequence>
         <xs:attribute name="uid" type="xs:long"/>
         <xs:attribute name="executionTime" type="xs:dateTime"/>
+        <xs:attribute name="status" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="Status">
@@ -70,13 +74,13 @@
     <xs:complexType name="Trigger">
         <xs:sequence>
             <xs:element name="job" type="Job" minOccurs="0"/>
-            <xs:element name="triggerType" type="TriggerType"/>
         </xs:sequence>
         <xs:attribute name="uid" type="xs:long"/>
         <xs:attribute name="triggerTime" type="xs:time"/>
         <xs:attribute name="triggerInterval" type="xs:long"/>
         <xs:attribute name="runDate" type="xs:date"/>
         <xs:attribute name="daysOfWeek" type="xs:int"/>
+        <xs:attribute name="triggerType" type="xs:string"/>
     </xs:complexType>
 
 </xs:schema>

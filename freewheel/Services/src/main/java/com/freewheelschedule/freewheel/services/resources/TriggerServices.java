@@ -25,7 +25,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.io.IOException;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 import static org.freewheelschedule.freewheel.common.util.ApplicationContextProvider.getApplicationContext;
 
 @Path("/triggers")
@@ -34,7 +34,7 @@ public class TriggerServices {
     TriggerListMapper triggerListMapper = new TriggerListMapper();
 
     @GET
-    @Produces(APPLICATION_JSON)
+    @Produces(APPLICATION_XML)
     public TriggerList getTriggerList() throws IOException {
         TriggerDao triggerDao = (TriggerDao) getApplicationContext().getBean("triggerDao");
         return triggerListMapper.map(triggerDao.read(), true);
