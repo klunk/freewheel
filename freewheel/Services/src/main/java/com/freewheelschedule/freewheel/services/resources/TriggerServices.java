@@ -16,16 +16,27 @@
 
 package com.freewheelschedule.freewheel.services.resources;
 
+import com.freewheelschedule.freewheel.api.TriggerList;
+import com.freewheelschedule.freewheel.api.TriggerListMapper;
+import org.freewheelschedule.freewheel.common.dao.TriggerDao;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import java.io.IOException;
 
-@Path("/simplewebservice")
-public class SimpleWebService {
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.freewheelschedule.freewheel.common.util.ApplicationContextProvider.getApplicationContext;
+
+@Path("/triggers")
+public class TriggerServices {
+
+    TriggerListMapper triggerListMapper = new TriggerListMapper();
 
     @GET
-    @Produces("text/plain")
-    public String getMessage() {
-        return "Hello World!";
+    @Produces(APPLICATION_JSON)
+    public TriggerList getTriggerList() throws IOException {
+        TriggerDao triggerDao = (TriggerDao) getApplicationContext().getBean("triggerDao");
+        return triggerListMapper.map(triggerDao.read(), true);
     }
 }

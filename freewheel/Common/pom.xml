@@ -39,6 +39,7 @@
         <jersey.version>1.17</jersey.version>
         <jackson.version>1.9.12</jackson.version>
         <spring.version>3.2.2.RELEASE</spring.version>
+        <hibernate.version>3.4.0.GA</hibernate.version>
         <spring.jpa.version>2.0.8</spring.jpa.version>
         <spring.integration.version>2.2.3.RELEASE</spring.integration.version>
     </properties>
@@ -106,7 +107,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-annotations</artifactId>
-            <version>3.4.0.GA</version>
+            <version>${hibernate.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -166,7 +167,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>3.4.0.GA</version>
+            <version>${hibernate.version}</version>
         </dependency>
         <dependency>
             <groupId>dom4j</groupId>

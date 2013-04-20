@@ -16,20 +16,15 @@
 
 package org.freewheelschedule.freewheel.rest;
 
-import com.sun.grizzly.http.embed.GrizzlyWebServer;
 import com.sun.jersey.api.container.grizzly2.GrizzlyServerFactory;
 import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.api.core.ResourceConfig;
-import com.sun.jersey.server.impl.container.servlet.ServletAdaptor;
-import com.sun.jersey.spi.container.servlet.WebConfig;
-import com.sun.jersey.spi.spring.container.servlet.SpringServlet;
+import com.sun.jersey.api.json.JSONConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.freewheelschedule.freewheel.controlserver.FreewheelAbstractRunnable;
 import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.grizzly.http.server.StaticHttpHandler;
 
-import javax.servlet.ServletConfig;
 import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.net.URI;
@@ -43,6 +38,7 @@ public class WebServiceRunner extends FreewheelAbstractRunnable {
     public void run() {
         log.info("Starting the web service ...");
         ResourceConfig resourceConfig = new PackagesResourceConfig("com.freewheelschedule.freewheel.services.resources");
+        resourceConfig.getProperties().put(JSONConfiguration.FEATURE_POJO_MAPPING, true);
         HttpServer httpServer = null;
         try {
             httpServer = GrizzlyServerFactory.createHttpServer(getBaseURI(), resourceConfig);

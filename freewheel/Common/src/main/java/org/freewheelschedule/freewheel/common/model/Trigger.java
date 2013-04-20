@@ -17,12 +17,11 @@
 package org.freewheelschedule.freewheel.common.model;
 
 
-import org.codehaus.jackson.annotate.JsonBackReference;
 import org.hamcrest.TypeSafeMatcher;
+
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.EAGER;
-import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "TRIGGER")
@@ -33,7 +32,6 @@ public abstract class Trigger<T> extends TypeSafeMatcher<T> implements Comparabl
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long uid;
-    @JsonBackReference
     @OneToOne(fetch= EAGER)
     Job job;
     @Column

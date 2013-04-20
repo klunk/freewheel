@@ -17,14 +17,12 @@
 package org.freewheelschedule.freewheel.common.model;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonManagedReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
 import static javax.persistence.FetchType.EAGER;
-import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name="JOB")
@@ -39,7 +37,6 @@ public abstract class Job implements Serializable {
     String name;
     @Column
     String description;
-    @JsonManagedReference
     @OneToMany(fetch= EAGER)
     List<Trigger> triggers;
     @JsonIgnore
@@ -53,7 +50,6 @@ public abstract class Job implements Serializable {
     String stderr;
     @Column
     Boolean appendStderr;
-    @JsonManagedReference
     @ManyToOne(fetch= EAGER)
     Machine executingServer;
 
