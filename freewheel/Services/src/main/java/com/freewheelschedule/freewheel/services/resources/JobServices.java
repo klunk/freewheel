@@ -27,7 +27,7 @@ import javax.ws.rs.Produces;
 import java.io.IOException;
 import java.util.List;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_XML;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.freewheelschedule.freewheel.common.util.ApplicationContextProvider.getApplicationContext;
 
 @Path("/jobs")
@@ -36,7 +36,7 @@ public class JobServices {
     JobListBuilder jobListMapper = new JobListBuilder();
 
     @GET
-    @Produces(APPLICATION_XML)
+    @Produces(APPLICATION_JSON)
     public JobList getJobList() throws IOException {
         JobDao jobDao = (JobDao) getApplicationContext().getBean("jobDao");
         List<Job> jobList = jobDao.read();

@@ -24,7 +24,9 @@ import org.freewheelschedule.freewheel.common.util.DayOfWeek;
 import org.joda.time.LocalTime;
 
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 public class TriggerBuilder implements JaxbBuilder<Trigger, org.freewheelschedule.freewheel.common.model.Trigger> {
 
@@ -35,7 +37,10 @@ public class TriggerBuilder implements JaxbBuilder<Trigger, org.freewheelschedul
         trigger.setTriggerType(source.getType().getValue());
         trigger.setTriggerTime(getTriggerTimeFromSource(source));
         trigger.setTriggerInterval(getTriggerIntervalFromSource(source));
-        trigger.setDaysOfWeek(getDaysOfWeekFromSource(source));
+        List<String> daysOfWeek = getDaysOfWeekFromSource(source);
+        if (daysOfWeek != null) {
+            trigger.getDaysOfWeek().addAll(daysOfWeek);
+        }
         trigger.setRunDate(getRunDateFromSource(source));
         if (mapCollections) {
             JobBuilder jobMapper = new JobBuilder();
@@ -53,19 +58,16 @@ public class TriggerBuilder implements JaxbBuilder<Trigger, org.freewheelschedul
         return null;
     }
 
-    private String getDaysOfWeekFromSource(org.freewheelschedule.freewheel.common.model.Trigger source) {
+    private List<String> getDaysOfWeekFromSource(org.freewheelschedule.freewheel.common.model.Trigger source) {
         if (source instanceof TimedTrigger) {
             int daysOfWeek = ((TimedTrigger) source).getDaysOfWeek();
-            StringBuilder builder = new StringBuilder();
+            List<String> days = new ArrayList<String>();
             for (DayOfWeek day : DayOfWeek.values()) {
                 if (day.matches(daysOfWeek)) {
-                    builder.append(day.name());
-                    builder.append(", ");
+                    days.add(day.name());
                 }
             }
-            if (builder.length() > 2) {
-                return builder.substring(0, builder.length() - 2);
-            }
+            return days;
         }
         return null;
     }
@@ -82,10 +84,10 @@ public class TriggerBuilder implements JaxbBuilder<Trigger, org.freewheelschedul
             LocalTime triggerTime = ((TriggerWithTime) source).getTriggerTime();
             return triggerTime == null ? null :
                     String.format("%2d:%02d:%02d.%03d",
-                    triggerTime.getHourOfDay(),
-                    triggerTime.getMinuteOfHour(),
-                    triggerTime.getSecondOfMinute(),
-                    triggerTime.getMillisOfSecond());
+                            triggerTime.getHourOfDay(),
+                            triggerTime.getMinuteOfHour(),
+                            triggerTime.getSecondOfMinute(),
+                            triggerTime.getMillisOfSecond());
         }
         return null;
     }

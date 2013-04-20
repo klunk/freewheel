@@ -37,8 +37,8 @@
     <xs:complexType name="Job">
         <xs:sequence>
             <xs:element name="executingServer" type="Machine" minOccurs="0"/>
-            <xs:element name="executions" type="ExecutionList"  minOccurs="0"/>
-            <xs:element name="triggers" type="TriggerList"  minOccurs="0"/>
+            <xs:element name="executions" type="ExecutionList" minOccurs="0"/>
+            <xs:element name="triggers" type="TriggerList" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute name="uid" type="xs:long"/>
         <xs:attribute name="name" type="xs:string"/>
@@ -74,12 +74,12 @@
     <xs:complexType name="Trigger">
         <xs:sequence>
             <xs:element name="job" type="Job" minOccurs="0"/>
+            <xs:element name="daysOfWeek" type="xs:string" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="uid" type="xs:long"/>
         <xs:attribute name="triggerTime" type="xs:string"/>
         <xs:attribute name="triggerInterval" type="xs:long"/>
         <xs:attribute name="runDate" type="xs:date"/>
-        <xs:attribute name="daysOfWeek" type="xs:string"/>
         <xs:attribute name="triggerType" type="xs:string"/>
     </xs:complexType>
 
