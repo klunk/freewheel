@@ -16,6 +16,6 @@
 
 package com.freewheelschedule.freewheel.api;
 
-public interface JaxbMapper<T, X> {
-    public T map(X source, boolean mapCollections);
+public interface JaxbBuilder<T, X> {
+    public T build(X source, boolean mapCollections);
 }

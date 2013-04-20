@@ -17,7 +17,7 @@
 package com.freewheelschedule.freewheel.services.resources;
 
 import com.freewheelschedule.freewheel.api.JobList;
-import com.freewheelschedule.freewheel.api.JobListMapper;
+import com.freewheelschedule.freewheel.api.JobListBuilder;
 import org.freewheelschedule.freewheel.common.dao.JobDao;
 import org.freewheelschedule.freewheel.common.model.Job;
 
@@ -33,7 +33,7 @@ import static org.freewheelschedule.freewheel.common.util.ApplicationContextProv
 @Path("/jobs")
 public class JobServices {
 
-    JobListMapper jobListMapper = new JobListMapper();
+    JobListBuilder jobListMapper = new JobListBuilder();
 
     @GET
     @Produces(APPLICATION_XML)
@@ -43,6 +43,6 @@ public class JobServices {
         for (Job job : jobList) {
             jobDao.loadLazyCollections(job);
         }
-        return jobListMapper.map(jobList, true);
+        return jobListMapper.build(jobList, true);
     }
 }

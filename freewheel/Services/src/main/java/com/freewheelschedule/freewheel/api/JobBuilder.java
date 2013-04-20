@@ -16,11 +16,11 @@
 
 package com.freewheelschedule.freewheel.api;
 
-public class JobMapper implements JaxbMapper<Job, org.freewheelschedule.freewheel.common.model.Job> {
+public class JobBuilder implements JaxbBuilder<Job, org.freewheelschedule.freewheel.common.model.Job> {
 
 
     @Override
-    public Job map(org.freewheelschedule.freewheel.common.model.Job source, boolean mapCollections) {
+    public Job build(org.freewheelschedule.freewheel.common.model.Job source, boolean mapCollections) {
         Job job = new Job();
         job.setUid(source.getUid());
         job.setName(source.getName());
@@ -30,10 +30,10 @@ public class JobMapper implements JaxbMapper<Job, org.freewheelschedule.freewhee
         job.setStdout(source.getStdout());
         job.setAppendStdout(source.getAppendStdout());
         if (mapCollections) {
-            TriggerListMapper triggerListMapper = new TriggerListMapper();
-            job.setTriggers(triggerListMapper.map(source.getTriggers(), false));
-            ExecutionListMapper executionListMapper = new ExecutionListMapper();
-            job.setExecutions(executionListMapper.map(source.getExecutions(), false));
+            TriggerListBuilder triggerListMapper = new TriggerListBuilder();
+            job.setTriggers(triggerListMapper.build(source.getTriggers(), false));
+            ExecutionListBuilder executionListMapper = new ExecutionListBuilder();
+            job.setExecutions(executionListMapper.build(source.getExecutions(), false));
         }
         return job;
     }

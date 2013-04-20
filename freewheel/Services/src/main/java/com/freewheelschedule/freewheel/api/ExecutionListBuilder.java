@@ -18,16 +18,16 @@ package com.freewheelschedule.freewheel.api;
 
 import java.util.List;
 
-public class JobListMapper implements JaxbMapper<JobList, List<org.freewheelschedule.freewheel.common.model.Job>> {
+public class ExecutionListBuilder implements JaxbBuilder<ExecutionList, List<org.freewheelschedule.freewheel.common.model.Execution>> {
 
-    JobMapper mapper= new JobMapper();
+    ExecutionBuilder mapper= new ExecutionBuilder();
 
     @Override
-    public JobList map(List<org.freewheelschedule.freewheel.common.model.Job> source, boolean mapCollections) {
-        JobList jobList = new JobList();
-        for(org.freewheelschedule.freewheel.common.model.Job job: source) {
-            jobList.getJob().add(mapper.map(job, mapCollections));
+    public ExecutionList build(List<org.freewheelschedule.freewheel.common.model.Execution> source, boolean mapCollections) {
+        ExecutionList executionList = new ExecutionList();
+        for(org.freewheelschedule.freewheel.common.model.Execution execution : source) {
+            executionList.getExecution().add(mapper.build(execution, mapCollections));
         }
-        return jobList;
+        return executionList;
     }
 }

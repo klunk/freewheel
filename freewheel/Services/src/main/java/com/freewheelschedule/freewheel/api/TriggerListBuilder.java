@@ -18,15 +18,15 @@ package com.freewheelschedule.freewheel.api;
 
 import java.util.List;
 
-public class TriggerListMapper implements JaxbMapper<TriggerList, List<org.freewheelschedule.freewheel.common.model.Trigger>> {
+public class TriggerListBuilder implements JaxbBuilder<TriggerList, List<org.freewheelschedule.freewheel.common.model.Trigger>> {
 
-    TriggerMapper mapper= new TriggerMapper();
+    TriggerBuilder mapper= new TriggerBuilder();
 
     @Override
-    public TriggerList map(List<org.freewheelschedule.freewheel.common.model.Trigger> source, boolean mapCollections) {
+    public TriggerList build(List<org.freewheelschedule.freewheel.common.model.Trigger> source, boolean mapCollections) {
         TriggerList triggerList = new TriggerList();
         for(org.freewheelschedule.freewheel.common.model.Trigger trigger: source) {
-            triggerList.getTrigger().add(mapper.map(trigger, mapCollections));
+            triggerList.getTrigger().add(mapper.build(trigger, mapCollections));
         }
         return triggerList;
     }

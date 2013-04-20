@@ -17,7 +17,7 @@
 package com.freewheelschedule.freewheel.services.resources;
 
 import com.freewheelschedule.freewheel.api.TriggerList;
-import com.freewheelschedule.freewheel.api.TriggerListMapper;
+import com.freewheelschedule.freewheel.api.TriggerListBuilder;
 import org.freewheelschedule.freewheel.common.dao.TriggerDao;
 
 import javax.ws.rs.GET;
@@ -31,12 +31,12 @@ import static org.freewheelschedule.freewheel.common.util.ApplicationContextProv
 @Path("/triggers")
 public class TriggerServices {
 
-    TriggerListMapper triggerListMapper = new TriggerListMapper();
+    TriggerListBuilder triggerListMapper = new TriggerListBuilder();
 
     @GET
     @Produces(APPLICATION_XML)
     public TriggerList getTriggerList() throws IOException {
         TriggerDao triggerDao = (TriggerDao) getApplicationContext().getBean("triggerDao");
-        return triggerListMapper.map(triggerDao.read(), true);
+        return triggerListMapper.build(triggerDao.read(), true);
     }
 }

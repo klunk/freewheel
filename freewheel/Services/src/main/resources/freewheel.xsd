@@ -76,10 +76,10 @@
             <xs:element name="job" type="Job" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute name="uid" type="xs:long"/>
-        <xs:attribute name="triggerTime" type="xs:time"/>
+        <xs:attribute name="triggerTime" type="xs:string"/>
         <xs:attribute name="triggerInterval" type="xs:long"/>
         <xs:attribute name="runDate" type="xs:date"/>
-        <xs:attribute name="daysOfWeek" type="xs:int"/>
+        <xs:attribute name="daysOfWeek" type="xs:string"/>
         <xs:attribute name="triggerType" type="xs:string"/>
     </xs:complexType>
 

@@ -20,10 +20,10 @@ import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl
 
 import java.util.GregorianCalendar;
 
-public class ExecutionMapper implements JaxbMapper<Execution, org.freewheelschedule.freewheel.common.model.Execution>{
+public class ExecutionBuilder implements JaxbBuilder<Execution, org.freewheelschedule.freewheel.common.model.Execution> {
 
     @Override
-    public Execution map(org.freewheelschedule.freewheel.common.model.Execution source, boolean mapCollections) {
+    public Execution build(org.freewheelschedule.freewheel.common.model.Execution source, boolean mapCollections) {
         Execution execution = new Execution();
         execution.setUid(source.getUid());
         GregorianCalendar calendar = new GregorianCalendar();
