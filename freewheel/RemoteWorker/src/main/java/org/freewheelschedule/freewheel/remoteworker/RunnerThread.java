@@ -16,7 +16,6 @@
 
 package org.freewheelschedule.freewheel.remoteworker;
 
-import lombok.Setter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.freewheelschedule.freewheel.common.message.JobInitiationMessage;
@@ -33,19 +32,14 @@ public class RunnerThread implements Runnable, Runner, InitializingBean {
     private static Log log = LogFactory.getLog(RunnerThread.class);
 
     private
-    @Setter
     int numberOfThreads;
     private
-    @Setter
     BlockingQueue<JobInitiationMessage> jobQueue;
     private
-    @Setter
     ExecutorService threadPool;
     private
-    @Setter
     boolean continueWaiting = true;
     private
-    @Setter
     int timeout;
     private int remotePort;
 
