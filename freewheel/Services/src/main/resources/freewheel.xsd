@@ -31,10 +31,17 @@
 
     <xs:element name="JobList" type="JobList"/>
     <xs:element name="TriggerList" type="TriggerList"/>
+    <xs:element name="QueueList" type="QueueList"/>
 
     <xs:complexType name="JobList">
         <xs:sequence>
             <xs:element name="job" type="Job" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="QueueList">
+        <xs:sequence>
+            <xs:element name="triggerList" type="TriggerList" maxOccurs="unbounded" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 

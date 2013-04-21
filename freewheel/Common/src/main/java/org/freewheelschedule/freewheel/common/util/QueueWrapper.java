@@ -21,7 +21,6 @@ import org.freewheelschedule.freewheel.common.model.TriggerType;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 
@@ -36,6 +35,10 @@ public class QueueWrapper {
         for (TriggerType triggerType : queueMap.keySet()) {
             this.queueMap.put(triggerType, queueMap.get(triggerType));
         }
+    }
+
+    public Map<TriggerType, BlockingQueue<Trigger>> getQueueMap() {
+        return queueMap;
     }
 
     public void put(Trigger trigger) throws InterruptedException {

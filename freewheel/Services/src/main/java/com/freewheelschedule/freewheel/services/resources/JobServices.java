@@ -24,7 +24,6 @@ import org.freewheelschedule.freewheel.common.model.Job;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.io.IOException;
 import java.util.List;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -33,16 +32,16 @@ import static org.freewheelschedule.freewheel.common.util.ApplicationContextProv
 @Path("/jobs")
 public class JobServices {
 
-    JobListBuilder jobListMapper = new JobListBuilder();
+    JobListBuilder jobListBuilder = new JobListBuilder();
 
     @GET
     @Produces(APPLICATION_JSON)
-    public JobList getJobList() throws IOException {
+    public JobList getJobList() {
         JobDao jobDao = (JobDao) getApplicationContext().getBean("jobDao");
         List<Job> jobList = jobDao.read();
         for (Job job : jobList) {
             jobDao.loadLazyCollections(job);
         }
-        return jobListMapper.build(jobList, true);
+        return jobListBuilder.build(jobList, true);
     }
 }

@@ -89,8 +89,6 @@
     <orderEntry type="library" name="Maven: org.hibernate:hibernate-entitymanager:3.4.0.GA" level="project" />
     <orderEntry type="library" name="Maven: javassist:javassist:3.4.GA" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.2" level="project" />
-    <orderEntry type="module" module-name="RemoteWorker" />
-    <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.9.12" level="project" />
     <orderEntry type="library" name="Maven: com.sun.jersey.contribs:jersey-spring:1.17" level="project" />
     <orderEntry type="library" name="Maven: com.sun.jersey:jersey-servlet:1.17" level="project" />
   </component>
