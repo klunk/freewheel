@@ -26,7 +26,7 @@ public class JobListBuilder implements JaxbBuilder<JobList, List<org.freewheelsc
     public JobList build(List<org.freewheelschedule.freewheel.common.model.Job> source, boolean mapCollections) {
         JobList jobList = new JobList();
         for(org.freewheelschedule.freewheel.common.model.Job job: source) {
-            jobList.getJob().add(mapper.build(job, mapCollections));
+            jobList.getJobs().add(mapper.build(job, mapCollections));
         }
         return jobList;
     }

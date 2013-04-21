@@ -26,7 +26,7 @@ public class TriggerListBuilder implements JaxbBuilder<TriggerList, List<org.fre
     public TriggerList build(List<org.freewheelschedule.freewheel.common.model.Trigger> source, boolean mapCollections) {
         TriggerList triggerList = new TriggerList();
         for(org.freewheelschedule.freewheel.common.model.Trigger trigger: source) {
-            triggerList.getTrigger().add(mapper.build(trigger, mapCollections));
+            triggerList.getTriggers().add(mapper.build(trigger, mapCollections));
         }
         return triggerList;
     }

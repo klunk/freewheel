@@ -14,7 +14,23 @@
   ~     limitations under the License.
   -->
 
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           jaxb:version="2.0"
+           xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+           jaxb:extensionBindingPrefixes="xjc"
+           elementFormDefault="qualified">
+
+    <xs:annotation>
+        <xs:appinfo>
+            <jaxb:globalBindings>
+                <xjc:simple />
+            </jaxb:globalBindings>
+        </xs:appinfo>
+    </xs:annotation>
+
+    <xs:element name="JobList" type="JobList"/>
+    <xs:element name="TriggerList" type="TriggerList"/>
 
     <xs:complexType name="JobList">
         <xs:sequence>
@@ -47,7 +63,16 @@
         <xs:attribute name="appendStdout" type="xs:boolean"/>
         <xs:attribute name="stderr" type="xs:string"/>
         <xs:attribute name="appendStderr" type="xs:boolean"/>
-        <xs:attribute name="command" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="CommandJob">
+        <xs:complexContent>
+            <xs:extension base="Job">
+                <xs:sequence>
+                    <xs:element name="command" type="xs:string"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
 
     <xs:complexType name="Machine">
@@ -67,20 +92,54 @@
         <xs:attribute name="status" type="xs:string"/>
     </xs:complexType>
 
-    <xs:complexType name="TriggerType">
-        <xs:attribute name="triggerType" type="xs:string"/>
-    </xs:complexType>
+    <xs:simpleType name="TriggerType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="BASIC"/>
+            <xs:enumeration value="REPEATING"/>
+            <xs:enumeration value="TIMED"/>
+            <xs:enumeration value="SUCCESS"/>
+            <xs:enumeration value="FAILURE"/>
+            <xs:enumeration value="RESOURCE"/>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:complexType name="Trigger">
         <xs:sequence>
             <xs:element name="job" type="Job" minOccurs="0"/>
-            <xs:element name="daysOfWeek" type="xs:string" maxOccurs="unbounded"/>
+            <xs:element name="triggerType" type="TriggerType"/>
         </xs:sequence>
         <xs:attribute name="uid" type="xs:long"/>
-        <xs:attribute name="triggerTime" type="xs:string"/>
-        <xs:attribute name="triggerInterval" type="xs:long"/>
-        <xs:attribute name="runDate" type="xs:date"/>
-        <xs:attribute name="triggerType" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="TriggerWithTime">
+        <xs:complexContent>
+            <xs:extension base="Trigger">
+                <xs:sequence>
+                    <xs:element name="triggerTime" type="xs:string"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="TimedTrigger">
+        <xs:complexContent>
+            <xs:extension base="TriggerWithTime">
+                <xs:sequence>
+                    <xs:element name="daysOfWeek" type="xs:string" maxOccurs="unbounded"/>
+                    <xs:element name="runDate" type="xs:date"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="RepeatingTrigger">
+        <xs:complexContent>
+            <xs:extension base="TriggerWithTime">
+                <xs:sequence>
+                    <xs:element name="triggerInterval" type="xs:long"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
 
 </xs:schema>

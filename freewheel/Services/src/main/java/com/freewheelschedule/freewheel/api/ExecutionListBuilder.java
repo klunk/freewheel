@@ -26,7 +26,7 @@ public class ExecutionListBuilder implements JaxbBuilder<ExecutionList, List<org
     public ExecutionList build(List<org.freewheelschedule.freewheel.common.model.Execution> source, boolean mapCollections) {
         ExecutionList executionList = new ExecutionList();
         for(org.freewheelschedule.freewheel.common.model.Execution execution : source) {
-            executionList.getExecution().add(mapper.build(execution, mapCollections));
+            executionList.getExecutions().add(mapper.build(execution, mapCollections));
         }
         return executionList;
     }

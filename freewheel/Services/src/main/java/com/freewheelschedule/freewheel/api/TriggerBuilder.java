@@ -17,9 +17,6 @@
 package com.freewheelschedule.freewheel.api;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
-import org.freewheelschedule.freewheel.common.model.RepeatingTrigger;
-import org.freewheelschedule.freewheel.common.model.TimedTrigger;
-import org.freewheelschedule.freewheel.common.model.TriggerWithTime;
 import org.freewheelschedule.freewheel.common.util.DayOfWeek;
 import org.joda.time.LocalTime;
 
@@ -32,16 +29,9 @@ public class TriggerBuilder implements JaxbBuilder<Trigger, org.freewheelschedul
 
     @Override
     public Trigger build(org.freewheelschedule.freewheel.common.model.Trigger source, boolean mapCollections) {
-        Trigger trigger = new Trigger();
+        Trigger trigger = getNewTriggerFromSource(source);
         trigger.setUid(source.getUid());
-        trigger.setTriggerType(source.getType().getValue());
-        trigger.setTriggerTime(getTriggerTimeFromSource(source));
-        trigger.setTriggerInterval(getTriggerIntervalFromSource(source));
-        List<String> daysOfWeek = getDaysOfWeekFromSource(source);
-        if (daysOfWeek != null) {
-            trigger.getDaysOfWeek().addAll(daysOfWeek);
-        }
-        trigger.setRunDate(getRunDateFromSource(source));
+        trigger.setTriggerType(TriggerType.fromValue(source.getType().getValue()));
         if (mapCollections) {
             JobBuilder jobMapper = new JobBuilder();
             trigger.setJob(jobMapper.build(source.getJob(), false));
@@ -49,46 +39,56 @@ public class TriggerBuilder implements JaxbBuilder<Trigger, org.freewheelschedul
         return trigger;
     }
 
+    private Trigger getNewTriggerFromSource(org.freewheelschedule.freewheel.common.model.Trigger source) {
+        Trigger trigger = null;
+        if (source instanceof org.freewheelschedule.freewheel.common.model.TimedTrigger) {
+            trigger = new TimedTrigger();
+            ((TimedTrigger) trigger).setTriggerTime(getTriggerTimeFromSource(source));
+            List<String> daysOfWeek = getDaysOfWeekFromSource(source);
+            if (daysOfWeek != null) {
+                ((TimedTrigger) trigger).getDaysOfWeeks().addAll(daysOfWeek);
+            }
+            ((TimedTrigger) trigger).setRunDate(getRunDateFromSource(source));
+        }
+        if (source instanceof org.freewheelschedule.freewheel.common.model.RepeatingTrigger) {
+            trigger = new RepeatingTrigger();
+            ((RepeatingTrigger) trigger).setTriggerTime(getTriggerTimeFromSource(source));
+            ((RepeatingTrigger) trigger).setTriggerInterval(getTriggerIntervalFromSource(source));
+        }
+        return trigger;
+    }
+
     private XMLGregorianCalendar getRunDateFromSource(org.freewheelschedule.freewheel.common.model.Trigger source) {
-        if (source instanceof TimedTrigger && ((TimedTrigger) source).getRunDate() != null) {
+        if (((org.freewheelschedule.freewheel.common.model.TimedTrigger) source).getRunDate() != null) {
             GregorianCalendar calendar = new GregorianCalendar();
-            calendar.setTime(((TimedTrigger) source).getRunDate().toDate());
+            calendar.setTime(((org.freewheelschedule.freewheel.common.model.TimedTrigger) source).getRunDate().toDate());
             return new XMLGregorianCalendarImpl(calendar);
         }
         return null;
     }
 
     private List<String> getDaysOfWeekFromSource(org.freewheelschedule.freewheel.common.model.Trigger source) {
-        if (source instanceof TimedTrigger) {
-            int daysOfWeek = ((TimedTrigger) source).getDaysOfWeek();
-            List<String> days = new ArrayList<String>();
-            for (DayOfWeek day : DayOfWeek.values()) {
-                if (day.matches(daysOfWeek)) {
-                    days.add(day.name());
-                }
+        int daysOfWeek = ((org.freewheelschedule.freewheel.common.model.TimedTrigger) source).getDaysOfWeek();
+        List<String> days = new ArrayList<String>();
+        for (DayOfWeek day : DayOfWeek.values()) {
+            if (day.matches(daysOfWeek)) {
+                days.add(day.name());
             }
-            return days;
         }
-        return null;
+        return days;
     }
 
     private Long getTriggerIntervalFromSource(org.freewheelschedule.freewheel.common.model.Trigger source) {
-        if (source instanceof RepeatingTrigger) {
-            return ((RepeatingTrigger) source).getTriggerInterval();
-        }
-        return null;
+        return ((org.freewheelschedule.freewheel.common.model.RepeatingTrigger) source).getTriggerInterval();
     }
 
     private String getTriggerTimeFromSource(org.freewheelschedule.freewheel.common.model.Trigger source) {
-        if (source instanceof TriggerWithTime) {
-            LocalTime triggerTime = ((TriggerWithTime) source).getTriggerTime();
-            return triggerTime == null ? null :
-                    String.format("%2d:%02d:%02d.%03d",
-                            triggerTime.getHourOfDay(),
-                            triggerTime.getMinuteOfHour(),
-                            triggerTime.getSecondOfMinute(),
-                            triggerTime.getMillisOfSecond());
-        }
-        return null;
+        LocalTime triggerTime = ((org.freewheelschedule.freewheel.common.model.TriggerWithTime) source).getTriggerTime();
+        return triggerTime == null ? null :
+                String.format("%2d:%02d:%02d.%03d",
+                        triggerTime.getHourOfDay(),
+                        triggerTime.getMinuteOfHour(),
+                        triggerTime.getSecondOfMinute(),
+                        triggerTime.getMillisOfSecond());
     }
 }

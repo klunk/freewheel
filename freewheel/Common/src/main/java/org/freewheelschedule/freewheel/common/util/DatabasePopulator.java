@@ -28,7 +28,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class DatabasePopulator {
@@ -48,7 +47,7 @@ public class DatabasePopulator {
         machineDao.create(machine);
 
         RepeatingTrigger trigger = new RepeatingTrigger();
-        trigger.setTriggerInterval(5000L);
+        trigger.setTriggerInterval(50000L);
         triggerDao.create(trigger);
 
         CommandJob job = new CommandJob();
@@ -70,8 +69,7 @@ public class DatabasePopulator {
 
         TimedTrigger timedTrigger = new TimedTrigger();
         LocalTime triggerTime = new LocalTime();
-        triggerTime.plusMillis(6000);
-        timedTrigger.setTriggerTime(triggerTime);
+        timedTrigger.setTriggerTime(triggerTime.plusMinutes(5));
         timedTrigger.setDaysOfWeek(127);
         triggerDao.create(timedTrigger);
 
