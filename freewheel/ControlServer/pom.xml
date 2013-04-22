@@ -118,6 +118,11 @@
             <version>${jackson.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
             <groupId>checkstyle</groupId>
             <artifactId>checkstyle</artifactId>
             <version>5.0</version>

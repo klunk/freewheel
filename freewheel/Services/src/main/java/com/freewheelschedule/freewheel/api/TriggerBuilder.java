@@ -25,6 +25,9 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import static org.freewheelschedule.freewheel.common.model.TriggerType.REPEATING;
+import static org.freewheelschedule.freewheel.common.model.TriggerType.TIMED;
+
 public class TriggerBuilder implements JaxbBuilder<Trigger, org.freewheelschedule.freewheel.common.model.Trigger> {
 
     @Override
@@ -41,7 +44,7 @@ public class TriggerBuilder implements JaxbBuilder<Trigger, org.freewheelschedul
 
     private Trigger getNewTriggerFromSource(org.freewheelschedule.freewheel.common.model.Trigger source) {
         Trigger trigger = null;
-        if (source instanceof org.freewheelschedule.freewheel.common.model.TimedTrigger) {
+        if (source.getType() == TIMED) {
             trigger = new TimedTrigger();
             ((TimedTrigger) trigger).setTriggerTime(getTriggerTimeFromSource(source));
             List<String> daysOfWeek = getDaysOfWeekFromSource(source);
@@ -50,7 +53,7 @@ public class TriggerBuilder implements JaxbBuilder<Trigger, org.freewheelschedul
             }
             ((TimedTrigger) trigger).setRunDate(getRunDateFromSource(source));
         }
-        if (source instanceof org.freewheelschedule.freewheel.common.model.RepeatingTrigger) {
+        if (source.getType() == REPEATING) {
             trigger = new RepeatingTrigger();
             ((RepeatingTrigger) trigger).setTriggerTime(getTriggerTimeFromSource(source));
             ((RepeatingTrigger) trigger).setTriggerInterval(getTriggerIntervalFromSource(source));
