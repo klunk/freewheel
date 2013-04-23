@@ -20,13 +20,13 @@ import java.util.List;
 
 public class ExecutionListBuilder implements JaxbBuilder<ExecutionList, List<org.freewheelschedule.freewheel.common.model.Execution>> {
 
-    ExecutionBuilder mapper= new ExecutionBuilder();
+    ExecutionBuilder executionBuilder = new ExecutionBuilder();
 
     @Override
     public ExecutionList build(List<org.freewheelschedule.freewheel.common.model.Execution> source, boolean mapCollections) {
         ExecutionList executionList = new ExecutionList();
         for(org.freewheelschedule.freewheel.common.model.Execution execution : source) {
-            executionList.getExecutions().add(mapper.build(execution, mapCollections));
+            executionList.getExecutions().add(executionBuilder.build(execution, mapCollections));
         }
         return executionList;
     }

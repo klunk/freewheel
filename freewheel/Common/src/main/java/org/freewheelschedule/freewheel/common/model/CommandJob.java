@@ -27,6 +27,10 @@ public class CommandJob extends Job {
     @Column
     private String command;
 
+    public CommandJob() {
+        super.setType(JobType.COMMAND);
+    }
+
     public String getCommand() {
         return command;
     }

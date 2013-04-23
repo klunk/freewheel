@@ -36,8 +36,8 @@ public class TriggerBuilder implements JaxbBuilder<Trigger, org.freewheelschedul
         trigger.setUid(source.getUid());
         trigger.setTriggerType(TriggerType.fromValue(source.getType().getValue()));
         if (mapCollections) {
-            JobBuilder jobMapper = new JobBuilder();
-            trigger.setJob(jobMapper.build(source.getJob(), false));
+            JobBuilder jobBuilder = new JobBuilder();
+            trigger.setJob(jobBuilder.build(source.getJob(), false));
         }
         return trigger;
     }

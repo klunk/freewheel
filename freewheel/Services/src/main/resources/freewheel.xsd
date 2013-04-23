@@ -62,6 +62,7 @@
             <xs:element name="executingServer" type="Machine" minOccurs="0"/>
             <xs:element name="executions" type="ExecutionList" minOccurs="0"/>
             <xs:element name="triggers" type="TriggerList" minOccurs="0"/>
+            <xs:element name="jobType" type="JobType"/>
         </xs:sequence>
         <xs:attribute name="uid" type="xs:long"/>
         <xs:attribute name="name" type="xs:string"/>
@@ -107,6 +108,14 @@
             <xs:enumeration value="SUCCESS"/>
             <xs:enumeration value="FAILURE"/>
             <xs:enumeration value="RESOURCE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="JobType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="COMMAND"/>
+            <xs:enumeration value="WATCHER"/>
+            <xs:enumeration value="BEAN"/>
         </xs:restriction>
     </xs:simpleType>
 

@@ -16,8 +16,6 @@
 
 package org.freewheelschedule.freewheel.common.model;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -39,7 +37,6 @@ public abstract class Job implements Serializable {
     String description;
     @OneToMany(fetch= EAGER)
     List<Trigger> triggers;
-    @JsonIgnore
     @OneToMany
     List<Execution> executions;
     @Column(nullable=true)
@@ -52,6 +49,8 @@ public abstract class Job implements Serializable {
     Boolean appendStderr;
     @ManyToOne(fetch= EAGER)
     Machine executingServer;
+    @Transient
+    JobType type;
 
     public Machine getExecutingServer() {
         return executingServer;
@@ -131,6 +130,14 @@ public abstract class Job implements Serializable {
 
     public void setStderr(String stderr) {
         this.stderr = stderr;
+    }
+
+    public JobType getType() {
+        return type;
+    }
+
+    protected void setType(JobType type) {
+        this.type = type;
     }
 
     public String toString() {

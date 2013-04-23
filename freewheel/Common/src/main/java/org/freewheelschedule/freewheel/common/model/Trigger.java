@@ -34,7 +34,7 @@ public abstract class Trigger<T> extends TypeSafeMatcher<T> implements Comparabl
     Long uid;
     @OneToOne(fetch= EAGER)
     Job job;
-    @Column
+    @Transient
     TriggerType type;
 
     public Long getUid() {
@@ -57,7 +57,7 @@ public abstract class Trigger<T> extends TypeSafeMatcher<T> implements Comparabl
         return type;
     }
 
-    public void setType(TriggerType type) {
+    protected void setType(TriggerType type) {
         this.type = type;
     }
 

@@ -21,7 +21,7 @@ public class JobBuilder implements JaxbBuilder<Job, org.freewheelschedule.freewh
 
     @Override
     public Job build(org.freewheelschedule.freewheel.common.model.Job source, boolean mapCollections) {
-        Job job = new Job();
+        Job job = getJobFromSource(source);
         job.setUid(source.getUid());
         job.setName(source.getName());
         job.setDescription(source.getDescription());
@@ -29,11 +29,21 @@ public class JobBuilder implements JaxbBuilder<Job, org.freewheelschedule.freewh
         job.setAppendStderr(source.getAppendStderr());
         job.setStdout(source.getStdout());
         job.setAppendStdout(source.getAppendStdout());
+        job.setJobType(JobType.fromValue(source.getType().getValue()));
         if (mapCollections) {
-            TriggerListBuilder triggerListMapper = new TriggerListBuilder();
-            job.setTriggers(triggerListMapper.build(source.getTriggers(), false));
-            ExecutionListBuilder executionListMapper = new ExecutionListBuilder();
-            job.setExecutions(executionListMapper.build(source.getExecutions(), false));
+            TriggerListBuilder triggerListBuilder = new TriggerListBuilder();
+            job.setTriggers(triggerListBuilder.build(source.getTriggers(), false));
+            ExecutionListBuilder executionListBuilder = new ExecutionListBuilder();
+            job.setExecutions(executionListBuilder.build(source.getExecutions(), false));
+        }
+        return job;
+    }
+
+    private Job getJobFromSource(org.freewheelschedule.freewheel.common.model.Job source) {
+        Job job = null;
+        if (source.getType() == org.freewheelschedule.freewheel.common.model.JobType.COMMAND) {
+            job = new CommandJob();
+            ((CommandJob) job).setCommand(((org.freewheelschedule.freewheel.common.model.CommandJob)source).getCommand());
         }
         return job;
     }

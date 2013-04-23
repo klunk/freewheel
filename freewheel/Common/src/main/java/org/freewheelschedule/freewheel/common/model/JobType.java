@@ -17,7 +17,17 @@
 package org.freewheelschedule.freewheel.common.model;
 
 public enum JobType {
-    COMMAND,
-    WATCHER,
-    BEAN
+    COMMAND("COMMAND"),
+    WATCHER("WATCHER"),
+    BEAN("BEAN");
+
+    private final String value;
+
+    JobType(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }

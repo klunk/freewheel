@@ -20,13 +20,13 @@ import java.util.List;
 
 public class JobListBuilder implements JaxbBuilder<JobList, List<org.freewheelschedule.freewheel.common.model.Job>> {
 
-    JobBuilder mapper= new JobBuilder();
+    JobBuilder jobBuilder = new JobBuilder();
 
     @Override
     public JobList build(List<org.freewheelschedule.freewheel.common.model.Job> source, boolean mapCollections) {
         JobList jobList = new JobList();
         for(org.freewheelschedule.freewheel.common.model.Job job: source) {
-            jobList.getJobs().add(mapper.build(job, mapCollections));
+            jobList.getJobs().add(jobBuilder.build(job, mapCollections));
         }
         return jobList;
     }
