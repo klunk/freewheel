@@ -70,8 +70,8 @@
                     <outputDirectory>${project.build.directory}/generated-sources/jaxb2</outputDirectory>
                     <schemaDirectory>${basedir}/src/main/resources</schemaDirectory>
                     <schemaFiles>freewheel.xsd</schemaFiles>
-                    <arguments>-extension</arguments>
                     <arguments>-enableIntrospection</arguments>
+                    <arguments>-extension</arguments>
                 </configuration>
             </plugin>
         </plugins>

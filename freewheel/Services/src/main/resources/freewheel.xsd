@@ -91,14 +91,21 @@
     </xs:complexType>
 
     <xs:complexType name="Execution">
+        <xs:sequence>
+            <xs:element name="status" type="Status"/>
+        </xs:sequence>
         <xs:attribute name="uid" type="xs:long"/>
         <xs:attribute name="executionTime" type="xs:dateTime"/>
-        <xs:attribute name="status" type="xs:string"/>
     </xs:complexType>
 
-    <xs:complexType name="Status">
-        <xs:attribute name="status" type="xs:string"/>
-    </xs:complexType>
+    <xs:simpleType name="Status">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="STARTED"/>
+            <xs:enumeration value="SUCCESS"/>
+            <xs:enumeration value="FAILURE"/>
+            <xs:enumeration value="ERROR"/>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:simpleType name="TriggerType">
         <xs:restriction base="xs:string">

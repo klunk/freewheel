@@ -43,7 +43,7 @@ public class ExecutionBuilderTest {
 
         Execution actualResult = objectUnderTest.build(source, false);
         assertThat(actualResult.getExecutionTime(), is(equalTo(expectedTime)));
-        assertThat(actualResult.getStatus(), is(equalTo(started.name())));
+        assertThat(actualResult.getStatus().value(), is(equalTo(started.name())));
         assertThat(actualResult.getUid(), is(equalTo(uid)));
     }
 }

@@ -48,8 +48,8 @@ public class JobBuilderTest {
         Job actualResult = objectUnderTest.build(source, false);
         assertThat(actualResult.getUid(), is(equalTo(uid)));
         assertThat(actualResult.getDescription(), is(equalTo(description)));
-        assertTrue(actualResult.getAppendStdout());
-        assertTrue(actualResult.getAppendStderr());
+        assertTrue(actualResult.isAppendStdout());
+        assertTrue(actualResult.isAppendStderr());
         assertThat(actualResult.getName(), is(equalTo(jobName)));
         assertThat(actualResult.getStdout(), is(equalTo(stdout)));
         assertThat(actualResult.getStderr(), is(equalTo(stderr)));

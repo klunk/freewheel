@@ -29,7 +29,7 @@ public class ExecutionBuilder implements JaxbBuilder<Execution, org.freewheelsch
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTime(source.getExecutionTime());
         execution.setExecutionTime(new XMLGregorianCalendarImpl(calendar));
-        execution.setStatus(source.getStatus().name());
+        execution.setStatus(Status.fromValue(source.getStatus().name()));
         return execution;
     }
 }
